@@ -158,7 +158,7 @@
             ? "Discord"
             : "N/A";
 
-          const response = await fetch("/netlify/functions/contact", {
+          const response = await fetch("/.netlify/functions/contact", {
             method: "POST",
             body: JSON.stringify({
               name,

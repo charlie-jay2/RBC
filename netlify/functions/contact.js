@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
         color: 7506394, // Color of the embed (optional)
     };
 
-    const webhookUrl = process.env.DiscordWebhook1;
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL1;
 
     try {
         const response = await fetch(webhookUrl, {
