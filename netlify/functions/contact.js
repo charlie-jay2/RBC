@@ -1,7 +1,16 @@
-// Replace require with a dynamic import
-const fetch = await import('node-fetch').then(module => module.default);
+// Use a standard dynamic import within an async function
+let fetch;
+
+const loadFetch = async () => {
+    if (!fetch) {
+        const module = await import('node-fetch');
+        fetch = module.default;
+    }
+};
 
 exports.handler = async (event, context) => {
+    await loadFetch(); // Ensure fetch is loaded
+
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
