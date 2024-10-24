@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact - RBC Television</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <!-- <a href="/shows/show1.html">Show 1</a> -->
+            <!-- Add more shows here -->
+          </div>
+        </li>
+      </ul>
+      <a href="index.html"
+        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
+      /></a>
+    </nav>
+
+    <style>
+      #contact {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 50px auto;
+        padding: 20px;
+        max-width: 500px; /* Maximum width of the contact form */
+        background-color: #2e2e3f; /* Box background color */
+        border-radius: 12px; /* Rounded corners */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Shadow for the box */
+        overflow: hidden; /* Prevent scrollbars */
+      }
+
+      #contact h1 {
+        color: #b06cfc; /* Heading color */
+        margin-bottom: 15px; /* Reduced space below the heading */
+      }
+
+      .form-group {
+        display: flex; /* Flex layout for label and input */
+        justify-content: space-between; /* Space between label and input */
+        align-items: center; /* Center vertically */
+        width: 100%; /* Full width for form groups */
+        margin-top: 10px; /* Space between fields */
+      }
+
+      #contact label {
+        color: #ffffff; /* Label color */
+        width: 30%; /* Fixed width for labels */
+      }
+
+      #contact input,
+      #contact textarea {
+        width: 70%; /* Make fields fill the remaining space */
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #b06cfc; /* Border color */
+        background-color: #1e1e2e; /* Input background color */
+        color: #ffffff; /* Input text color */
+        height: 40px; /* Set a height for input fields */
+      }
+
+      #contact textarea {
+        min-height: 80px; /* Set a minimum height for the textarea */
+        resize: vertical; /* Allow vertical resizing only */
+      }
+
+      #contact button {
+        background-color: #b06cfc; /* Button color */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%; /* Make the button full width */
+      }
+
+      #contact button:hover {
+        background-color: #a052c7; /* Darker shade on hover */
+      }
+    </style>
+
+    <section id="contact">
+      <h1>Contact Us</h1>
+      <form id="contact-form">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="discord-username">Discord Username:</label>
+          <input
+            type="text"
+            id="discord-username"
+            name="discord-username"
+            required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" />
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Preferred Contact Method:</label>
+          <input
+            type="checkbox"
+            id="contact-method-email"
+            name="contact-method"
+            value="Email" />
+          <label for="contact-method-email">Email</label>
+          <input
+            type="checkbox"
+            id="contact-method-discord"
+            name="contact-method"
+            value="Discord" />
+          <label for="contact-method-discord">Discord</label>
+        </div>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <footer>
+      <p>&copy; 2024 RBC Television. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document
+        .getElementById("contact-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const name = document.getElementById("name").value || "N/A";
+          const discordUsername =
+            document.getElementById("discord-username").value || "N/A";
+          const email = document.getElementById("email").value || "N/A";
+          const message = document.getElementById("message").value || "N/A";
+          const contactMethodEmail = document.getElementById(
+            "contact-method-email"
+          ).checked
+            ? "Email"
+            : "N/A";
+          const contactMethodDiscord = document.getElementById(
+            "contact-method-discord"
+          ).checked
+            ? "Discord"
+            : "N/A";
+
+          const response = await fetch("/.netlify/functions/contact", {
+            method: "POST",
+            body: JSON.stringify({
+              name,
+              discordUsername,
+              email,
+              message,
+              contactMethodEmail,
+              contactMethodDiscord,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            alert("Message sent successfully!");
+          } else {
+            alert("Failed to send the message.");
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - RBC Television</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        color: white;
+      }
+
+      .stations {
+        text-decoration: underline;
+        color: white;
+        margin-left: 10px;
+      }
+
+      .our-team {
+        text-decoration: underline;
+        color: white;
+      }
+
+      nav {
+        display: flex;
+        align-items: center; /* Align items vertically */
+      }
+
+      nav img {
+        height: 50px; /* Adjust the height as needed */
+        margin-right: 20px; /* Space between logo and nav items */
+      }
+
+      nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+        flex-grow: 1; /* Allows the menu to take remaining space */
+      }
+
+      nav ul li {
+        float: left;
+      }
+
+      nav ul li a,
+      .dropbtn {
+        display: inline-block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      nav ul li a:hover,
+      .dropdown:hover .dropbtn {
+        background-color: #111;
+      }
+
+      nav ul li.dropdown {
+        display: inline-block;
+      }
+
+      nav ul li .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        z-index: 1;
+      }
+
+      nav ul li .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      nav ul li .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      nav ul li.dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      /* New styles for the main section */
+      #home {
+        padding: 20px; /* Adds padding to the section */
+        text-align: left; /* Align text to the left */
+      }
+
+      h1,
+      h2 {
+        margin-left: 10px; /* Additional left margin for headers */
+      }
+
+      p {
+        margin-left: 10px; /* Additional left margin for paragraphs */
+      }
+
+      /* Optional: Center the footer */
+      footer {
+        text-align: center;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <!-- <a href="/shows/show1.html">Show 1</a> -->
+            <!-- Add more shows here -->
+          </div>
+        </li>
+        <img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav img" />
+        <!-- Add the logo here -->
+      </ul>
+    </nav>
+
+    <section id="home">
+      <h1>Welcome to RBC Radio</h1>
+      <p>
+        Listen to the best music on RBC Radio 1 and RBC Radio 2. Check out our
+        shows and meet our fantastic team!
+      </p>
+
+      <div id="stations">
+        <h2>Our Radio Stations</h2>
+        <div>
+          <a href="radio.html" class="stations">Listen to RBC Radio 1</a>
+        </div>
+      </div>
+
+      <div id="team-preview">
+        <h2>Meet Our Team</h2>
+        <p>
+          Check out our
+          <a href="our-team.html" class="our-team">team page</a> to meet our
+          executive team members.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2024 RBC Television. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

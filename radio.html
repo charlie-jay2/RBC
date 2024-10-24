@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RBC Radio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <a href="/shows/show1.html">Show 1</a>
+            <!-- Add more shows here -->
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <section id="radio">
+      <h1>Listen to RBC Radio</h1>
+
+      <!-- Station Logo -->
+      <div id="station-logo">
+        <img
+          id="radio1-logo"
+          src="/assets/Radio1Logo.png"
+          alt="Radio 1 Logo"
+          style="display: block" />
+        <img
+          id="radio2-logo"
+          src="/assets/Radio2Logo.png"
+          alt="Radio 2 Logo"
+          style="display: none" />
+      </div>
+
+      <!-- Station Selector -->
+      <select id="station-selector">
+        <option value="radio1" selected>RBC Radio 1</option>
+        <option value="radio2">RBC Radio 2</option>
+      </select>
+
+      <!-- Play Button -->
+      <div class="player-container">
+        <button id="play-button">Play</button>
+      </div>
+
+      <!-- Song Info -->
+      <div id="song-info">
+        <p>
+          <strong>Now Playing:</strong> <span id="song-title">Unknown</span> by
+          <span id="artist-name">Unknown Artist</span>
+        </p>
+      </div>
+
+      <!-- Song Artwork -->
+      <div id="song-artwork">
+        <img id="album-art" src="" alt="Album Art" style="display: none" />
+      </div>
+
+      <!-- Audio Player -->
+      <audio id="audio-player" controls style="display: none"></audio>
+    </section>
+
+    <footer>
+      <p>&copy; 2024 RBC Television. All rights reserved.</p>
+    </footer>
+
+    <style>
+      body {
+        font-family: "Raleway", sans-serif;
+        background-color: #1e1e2e;
+        color: #ffffff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        color: #b06cfc;
+        margin-top: 50px;
+      }
+
+      #station-logo {
+        margin: 20px auto;
+      }
+
+      #station-selector {
+        margin: 20px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #2e2e3f;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .player-container {
+        margin-top: 20px;
+      }
+
+      #play-button {
+        padding: 15px 40px;
+        background-color: #b06cfc;
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out,
+          background-color 0.3s ease-in-out; /* Add transition for background color */
+      }
+
+      #play-button:hover {
+        transform: scale(1.1);
+      }
+
+      #song-info {
+        margin-top: 20px;
+      }
+
+      #song-artwork {
+        margin-top: 20px;
+      }
+
+      #album-art {
+        width: 250px;
+        height: 250px;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #play-button.disabled {
+        background-color: grey; /* Change background color to grey */
+        cursor: not-allowed;
+        transform: scale(1); /* Reset scale */
+        transition: transform 0.2s ease-in-out,
+          background-color 0.3s ease-in-out; /* Ensure transition applies */
+      }
+    </style>
+
+    <script>
+      const radio1Logo = document.getElementById("radio1-logo");
+      const radio2Logo = document.getElementById("radio2-logo");
+      const playButton = document.getElementById("play-button");
+      const audioPlayer = document.getElementById("audio-player");
+      const stationSelector = document.getElementById("station-selector");
+      const songTitle = document.getElementById("song-title");
+      const artistName = document.getElementById("artist-name");
+      const albumArt = document.getElementById("album-art");
+
+      const stations = {
+        radio1: "https://play.adtonos.com/rbc-radio-1",
+        radio2: null, // Radio2 is unavailable
+      };
+
+      // Function to update the player and logo on station change
+      stationSelector.addEventListener("change", () => {
+        const selectedStation = stationSelector.value;
+
+        if (selectedStation === "radio1") {
+          // Set Radio1 Logo, Play button active
+          radio1Logo.style.display = "block";
+          radio2Logo.style.display = "none";
+          playButton.innerText = "Play";
+          playButton.classList.remove("disabled");
+          playButton.disabled = false;
+          audioPlayer.src = stations.radio1;
+        } else {
+          // Set Radio2 Logo, disable play button
+          radio1Logo.style.display = "none";
+          radio2Logo.style.display = "block";
+          playButton.innerText = "Unavailable";
+          playButton.classList.add("disabled");
+          playButton.disabled = true;
+          audioPlayer.src = "";
+        }
+      });
+
+      // Set default station to Radio1 and update song info every 10 seconds
+      window.onload = () => {
+        audioPlayer.src = stations.radio1; // Default station
+
+        async function fetchSongInfo() {
+          const songInfoURL =
+            "https://api.typicalmedia.net/api/v1/radioStats?station=26";
+          const response = await fetch(songInfoURL);
+          const data = await response.json();
+          songTitle.innerText = data.title;
+          artistName.innerText = data.artist;
+
+          // Set album art if available
+          if (data.artwork_url) {
+            albumArt.src = data.artwork_url;
+            albumArt.style.display = "block";
+          } else {
+            albumArt.style.display = "none";
+          }
+        }
+
+        // Fetch song info every 10 seconds
+        setInterval(fetchSongInfo, 10000);
+      };
+
+      playButton.addEventListener("click", () => {
+        if (!playButton.disabled) {
+          audioPlayer.play();
+        }
+      });
+    </script>
+  </body>
+</html>
