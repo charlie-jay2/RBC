@@ -33,9 +33,9 @@
           </div>
         </li>
       </ul>
-      <a href="index.html"
-        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
-      /></a>
+      <a href="index.html">
+        <img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img" />
+      </a>
     </nav>
 
     <section id="radio">
@@ -164,6 +164,7 @@
           background-color 0.3s ease-in-out; /* Ensure transition applies */
       }
     </style>
+
     <script>
       async function checkForReload() {
         const response = await fetch("/.netlify/functions/triggerReload");
@@ -176,6 +177,7 @@
       // Check for reload every 5 seconds
       setInterval(checkForReload, 5000);
     </script>
+
     <script>
       const radio1Logo = document.getElementById("radio1-logo");
       const playButton = document.getElementById("play-button");
@@ -188,6 +190,9 @@
       const stations = {
         radio1: "https://play.adtonos.com/rbc-radio-1",
       };
+
+      // Placeholder image for album art
+      const placeholderImage = "./assets/Radio1Back.png";
 
       // Function to update the player and logo on station change
       stationSelector.addEventListener("change", () => {
@@ -216,12 +221,13 @@
           songTitle.innerText = data.current_song.title || "Unknown";
           artistName.innerText = data.current_song.artist || "Unknown Artist";
 
-          // Update album art if available
+          // Update album art if available; otherwise, use placeholder image
           if (data.current_song.art) {
             albumArt.src = data.current_song.art;
             albumArt.style.display = "block";
           } else {
-            albumArt.style.display = "none";
+            albumArt.src = placeholderImage; // Set to placeholder image
+            albumArt.style.display = "block"; // Ensure it's displayed
           }
 
           // Set a timeout before fetching the next song info
