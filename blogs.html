@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blogs - RBC Television</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="index.html"
+        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
+      /></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </nav>
+
+    <h1>Blogs</h1>
+    <div id="blog-container" class="team-grid"></div>
+
+    <footer>
+      <p>&copy; 2024 RBC Television. All rights reserved.</p>
+    </footer>
+
+    <script>
+      async function fetchBlogs() {
+        const response = await fetch("/.netlify/functions/blog");
+        const blogs = await response.json();
+        const container = document.getElementById("blog-container");
+
+        blogs.forEach((blog) => {
+          const blogElement = document.createElement("div");
+          blogElement.className = "team-member";
+          blogElement.innerHTML = `
+          <h3>${blog.title}</h3>
+          <p>${blog.description}</p>
+        `;
+          container.appendChild(blogElement);
+        });
+      }
+
+      fetchBlogs();
+    </script>
+  </body>
+</html>
