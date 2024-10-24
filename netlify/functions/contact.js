@@ -1,6 +1,12 @@
-const fetch = require('node-fetch');
+// Instead of using require, we will dynamically import node-fetch
+let fetch;
 
 exports.handler = async (event, context) => {
+    // Dynamically import node-fetch
+    if (!fetch) {
+        fetch = (await import('node-fetch')).default;
+    }
+
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -21,8 +27,16 @@ exports.handler = async (event, context) => {
 
     const { name, discord_username, email, message, contact_method } = data;
 
-    const formattedEmail = email;
-    const formattedContactMethod = contact_method?.length > 0 ? contact_method.join(', ') : 'N/A';
+    // Validate that all required fields are present
+    if (!name || !discord_username || !email || !message || !contact_method || contact_method.length === 0) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ message: 'All fields are required, including a contact method.' }),
+        };
+    }
+
+    const formattedEmail = email || 'N/A';
+    const formattedContactMethod = contact_method.length > 0 ? contact_method.join(', ') : 'N/A';
 
     const embed = {
         title: "New Contact Form Submission",
