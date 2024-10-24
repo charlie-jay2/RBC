@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleNotibar(true,
         "This website is under development | Our contact form is unavailable",
         ["Learn More", "Contact Us", "Dismiss"],
-        ["shows.html", "https://discord.gg/rbctv", ""], // Button links
+        ["shows.html", "https://discord.gg/rbctv", target = "_blank", ""], // Button links
         {
             backgroundColor: "#333", // Notibar background color
             textColor: "white", // Notibar text color

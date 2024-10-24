@@ -27,89 +27,112 @@
       setInterval(checkForReload, 5000);
     </script>
     <style>
-      body {
-        color: white;
-        overflow-x: hidden;
-      }
+      /* (Your existing CSS styles) */
 
-      .stations {
-        text-decoration: underline;
-        color: white;
-        margin-left: 10px;
-      }
-
-      .our-team {
-        text-decoration: underline;
-        color: white;
-      }
-
-      /* New styles for the main section */
-      #home {
-        padding: 20px; /* Adds padding to the section */
-        text-align: left; /* Align text to the left */
-      }
-
-      h1,
-      h2 {
-        margin-left: 10px; /* Additional left margin for headers */
-      }
-
-      p {
-        margin-left: 10px; /* Additional left margin for paragraphs */
-      }
-
-      /* Optional: Center the footer */
-      footer {
-        text-align: center;
-        margin-top: 50px;
-      }
-
-      #notibar {
-        width: 100%; /* Full width */
-        background-color: #333; /* Default background color */
-        color: white; /* Text color */
-        padding: 10px; /* Padding for the Notibar */
+      /* Hamburger Menu Styles */
+      .hamburger {
         display: none; /* Hidden by default */
-        text-align: center; /* Center text */
-        border-radius: 0; /* No border radius */
-        margin: 0; /* Remove margin to connect with navbar */
-        position: relative; /* Relative position for layout */
-        z-index: 1000; /* Ensure it stays above other content */
+        cursor: pointer; /* Pointer cursor on hover */
+        flex-direction: column; /* Arrange items vertically */
+        padding: 10px; /* Padding for the hamburger */
+      }
+
+      .bar {
+        height: 3px; /* Height of the bars */
+        width: 30px; /* Width of the bars */
+        background-color: white; /* Bar color */
+        margin: 3px 0; /* Margin between bars */
+        transition: 0.4s; /* Transition effect */
+      }
+
+      /* Navigation styles */
+      nav {
+        display: flex; /* Flex layout for nav */
+        justify-content: space-between; /* Space out nav items */
+        align-items: center; /* Center items vertically */
+        padding: 10px; /* Padding around the nav */
+      }
+
+      nav ul {
+        list-style: none; /* Remove default list style */
+        display: flex; /* Flex display for the nav items */
+        margin: 0; /* No margin */
+        padding: 0; /* No padding */
+      }
+
+      nav ul li {
+        margin: 0 15px; /* Margin between nav items */
+      }
+
+      nav a {
+        text-decoration: none; /* No underline for links */
+        color: white; /* Link color */
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex; /* Show hamburger icon on mobile */
+        }
+
+        nav ul {
+          display: none; /* Hide nav items by default on mobile */
+          flex-direction: column; /* Stack nav items vertically */
+          position: absolute; /* Position absolutely */
+          background-color: #333; /* Background color for the menu */
+          top: 60px; /* Position below the navbar */
+          left: 0; /* Align to the left */
+          width: 100%; /* Full width */
+          z-index: 999; /* Ensure it's above other content */
+        }
+
+        nav ul.show {
+          display: flex; /* Show nav items when toggled */
+        }
+
+        nav ul li {
+          margin: 10px 0; /* Vertical margin between items */
+          text-align: center; /* Center align text */
+        }
       }
     </style>
   </head>
   <body>
     <nav>
-      <ul>
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <a href="index.html"
+        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
+      /></a>
+      <ul id="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
         <li><a href="our-team.html">Our Team</a></li>
         <li><a href="radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
           <div class="dropdown-content">
-            <!-- <a href="/shows/show1.html">Show 1</a> -->
+            <a href="/shows/show1.html">Show 1</a>
             <!-- Add more shows here -->
           </div>
         </li>
       </ul>
-      <a href="index.html"
-        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
-      /></a>
-      <!-- Make the logo a clickable link to index.html -->
     </nav>
 
     <div id="notibar">
       <!-- Notibar content will be dynamically added by notibar.js -->
     </div>
 
-    <section id="home">
+    <section id="home" style="padding: 0px 20px">
       <h1>Welcome to RBC Radio</h1>
       <p>
         Listen to the best music on RBC Radio 1 and RBC Radio 2. Check out our
         shows and meet our fantastic team! Alongside our fantastic shows we have
         to offer at RBC. Do that, by hovering over "Shows" and selecting the
-        show of your choice
+        show of your choice.
       </p>
 
       <div id="stations">
@@ -132,5 +155,23 @@
     <footer>
       <p>&copy; 2024 RBC Television. All rights reserved.</p>
     </footer>
+
+    <script>
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+      const notibar = document.getElementById("notibar");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+
+        // Toggle Notibar visibility
+        if (navLinks.classList.contains("show")) {
+          notibar.style.display = "none"; // Hide notibar when menu is open
+        } else {
+          notibar.style.display = "block"; // Show notibar when menu is closed
+        }
+      });
+    </script>
   </body>
 </html>
