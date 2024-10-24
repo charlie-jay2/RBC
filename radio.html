@@ -188,6 +188,7 @@
           playButton.classList.remove("disabled");
           playButton.disabled = false;
           audioPlayer.src = stations.radio1;
+          fetchSongInfo(); // Fetch song info when switching to Radio 1
         } else {
           // Set Radio2 Logo, disable play button
           radio1Logo.style.display = "none";
@@ -196,35 +197,41 @@
           playButton.classList.add("disabled");
           playButton.disabled = true;
           audioPlayer.src = "";
+          clearInterval(songInfoInterval); // Clear interval for Radio 2
         }
       });
 
-      // Set default station to Radio1 and update song info every 10 seconds
-      window.onload = () => {
-        audioPlayer.src = stations.radio1; // Default station
-
-        async function fetchSongInfo() {
+      // Function to fetch and update song info
+      async function fetchSongInfo() {
+        try {
           const songInfoURL =
-            "https://api.typicalmedia.net/api/v1/radioStats?station=26"; // Adjust the URL if needed
+            "https://api.typicalmedia.net/api/v1/radioStats?station=26";
           const response = await fetch(songInfoURL);
           const data = await response.json();
 
           // Update song title and artist
-          songTitle.innerText = data.current_song.title;
-          artistName.innerText = data.current_song.artist;
+          songTitle.innerText = data.current_song.title || "Unknown";
+          artistName.innerText = data.current_song.artist || "Unknown Artist";
 
-          // Set album art if available
+          // Update album art if available
           if (data.current_song.art) {
             albumArt.src = data.current_song.art;
             albumArt.style.display = "block";
           } else {
             albumArt.style.display = "none";
           }
+        } catch (error) {
+          console.error("Error fetching song info:", error);
         }
+      }
+
+      // Set default station to Radio1 and start fetching song info every 10 seconds
+      window.onload = () => {
+        audioPlayer.src = stations.radio1; // Default station
+        fetchSongInfo(); // Initial fetch for the first song
 
         // Fetch song info every 10 seconds
-        setInterval(fetchSongInfo, 10000);
-        fetchSongInfo(); // Initial fetch
+        songInfoInterval = setInterval(fetchSongInfo, 10000);
       };
 
       playButton.addEventListener("click", () => {
