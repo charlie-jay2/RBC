@@ -85,7 +85,7 @@
         resize: vertical; /* Allow vertical resizing only */
       }
 
-      #contact button {
+      #contact-button {
         background-color: #b06cfc; /* Button color */
         color: white;
         padding: 10px 15px;
@@ -96,8 +96,18 @@
         width: 100%; /* Make the button full width */
       }
 
-      #contact button:hover {
+      #contact-button:hover {
         background-color: #a052c7; /* Darker shade on hover */
+      }
+
+      #contact-button:disabled {
+        background-color: gray; /* Color for disabled state */
+        cursor: default; /* Prevents pointer cursor */
+        opacity: 0.5; /* Optional: makes it look disabled */
+      }
+
+      #contact-button:disabled:hover {
+        background-color: gray; /* No hover effect for disabled state */
       }
     </style>
 
@@ -139,10 +149,31 @@
             value="Discord" />
           <label for="contact-method-discord">Discord</label>
         </div>
-        <button type="submit">Send Message</button>
+        <button id="contact-button" type="submit" disabled>Unavailable</button>
       </form>
     </section>
+    <script>
+      // Initial state variable for the button
+      let isButtonDisabled = true; // Start with the button disabled
 
+      // Function to update the button state and text
+      function updateButtonState() {
+        const contactButton = document.getElementById("contact-button");
+        contactButton.disabled = isButtonDisabled;
+        contactButton.innerText = isButtonDisabled
+          ? "Unavailable"
+          : "Send Message";
+      }
+
+      // Call this function to set the initial state
+      updateButtonState();
+
+      // Example function to toggle the button state (you can replace this with your own logic)
+      function toggleButton() {
+        isButtonDisabled = !isButtonDisabled; // Toggle the state
+        updateButtonState(); // Update the button based on the new state
+      }
+    </script>
     <footer>
       <p>&copy; 2024 RBC Television. All rights reserved.</p>
     </footer>
