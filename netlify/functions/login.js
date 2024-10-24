@@ -1,42 +1,34 @@
-// login.js
-
-require('dotenv').config();  // Load environment variables
 const connectToDatabase = require('./db');
-const { User } = require('./database');  // Import User model
 
 exports.handler = async (event) => {
     try {
+        console.log("Connecting to database...");
         const db = await connectToDatabase();
-
-        // Only support POST requests
-        if (event.httpMethod !== 'POST') {
-            return {
-                statusCode: 405,
-                body: JSON.stringify({ message: 'Method Not Allowed' }),
-            };
-        }
+        console.log("Connected to database!");
 
         const { username, password } = JSON.parse(event.body);
+        console.log(`Logging in user: ${username}`);
 
-        // Validate the credentials against the database
-        const user = await db.collection('users').findOne({ username, password });
+        const user = await db.collection('users').findOne({ username });
 
-        if (user) {
+        if (user && user.password === password) {
+            console.log("Login successful!");
             return {
                 statusCode: 200,
                 body: JSON.stringify({ message: 'Login successful!' }),
             };
-        } else {
-            return {
-                statusCode: 401,
-                body: JSON.stringify({ message: 'Invalid credentials.' }),
-            };
         }
+
+        console.log("Invalid username or password");
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ message: 'Invalid username or password' }),
+        };
     } catch (error) {
-        // Handle unexpected errors
+        console.error("Error during login process", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Internal Server Error', error: error.message }),
+            body: JSON.stringify({ message: 'Internal server error' }),
         };
     }
 };

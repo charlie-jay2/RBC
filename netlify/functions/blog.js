@@ -1,3 +1,5 @@
+// blog.js
+
 const connectToDatabase = require('./db');
 const { ObjectId } = require('mongodb');
 
@@ -7,11 +9,9 @@ exports.handler = async (event) => {
 
         if (event.httpMethod === 'GET') {
             if (event.path.includes('/blog/')) {
-                // Fetch a single blog post by ID
                 const id = event.path.split('/blog/')[1];
                 const blog = await db.collection('blogs').findOne({ _id: new ObjectId(id) });
 
-                // Check if blog exists and format the createdAt date
                 if (blog) {
                     blog.createdAt = blog.createdAt
                         ? new Date(blog.createdAt).toLocaleDateString("en-GB", {
@@ -28,10 +28,7 @@ exports.handler = async (event) => {
                 };
             }
 
-            // Fetch all blog posts
             const blogs = await db.collection('blogs').find().toArray();
-
-            // Format dates for all blogs
             blogs.forEach(blog => {
                 blog.createdAt = blog.createdAt
                     ? new Date(blog.createdAt).toLocaleDateString("en-GB", {
@@ -68,8 +65,7 @@ exports.handler = async (event) => {
                 };
             }
 
-            // Store the blog post and create it
-            const createdAt = new Date(); // Get current date
+            const createdAt = new Date();
             await db.collection('blogs').insertOne({ title, description, image, author, createdAt });
             return {
                 statusCode: 201,
