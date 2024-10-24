@@ -9,7 +9,7 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
 
-    <meta property="og:title" content="RBC Radio" />
+    <meta property="og:title" content="RBC Television - Radio 1" />
     <meta property="og:description" content="The non-stop radio" />
     <meta
       property="og:image"
@@ -48,17 +48,11 @@
           src="/assets/Radio1Logo.png"
           alt="Radio 1 Logo"
           style="display: block" />
-        <img
-          id="radio2-logo"
-          src="/assets/Radio2Logo.png"
-          alt="Radio 2 Logo"
-          style="display: none" />
       </div>
 
       <!-- Station Selector -->
       <select id="station-selector">
         <option value="radio1" selected>RBC Radio 1</option>
-        <option value="radio2">RBC Radio 2</option>
       </select>
 
       <!-- Play Button -->
@@ -173,7 +167,6 @@
 
     <script>
       const radio1Logo = document.getElementById("radio1-logo");
-      const radio2Logo = document.getElementById("radio2-logo");
       const playButton = document.getElementById("play-button");
       const audioPlayer = document.getElementById("audio-player");
       const stationSelector = document.getElementById("station-selector");
@@ -183,10 +176,7 @@
 
       const stations = {
         radio1: "https://play.adtonos.com/rbc-radio-1",
-        radio2: null, // Radio2 is unavailable
       };
-
-      let songInfoInterval; // Initialize variable for song info interval
 
       // Function to update the player and logo on station change
       stationSelector.addEventListener("change", () => {
@@ -195,21 +185,11 @@
         if (selectedStation === "radio1") {
           // Set Radio1 Logo, Play button active
           radio1Logo.style.display = "block";
-          radio2Logo.style.display = "none";
           playButton.innerText = "Play";
           playButton.classList.remove("disabled");
           playButton.disabled = false;
           audioPlayer.src = stations.radio1;
           fetchSongInfo(); // Fetch song info when switching to Radio 1
-        } else {
-          // Set Radio2 Logo, disable play button
-          radio1Logo.style.display = "none";
-          radio2Logo.style.display = "block";
-          playButton.innerText = "Unavailable";
-          playButton.classList.add("disabled");
-          playButton.disabled = true;
-          audioPlayer.src = "";
-          clearInterval(songInfoInterval); // Clear interval for Radio 2
         }
       });
 
@@ -234,10 +214,10 @@
           }
 
           // Set a timeout before fetching the next song info
-          setTimeout(fetchSongInfo, 30000); // Delay of 10 seconds
+          setTimeout(fetchSongInfo, 30000); // Delay of 30 seconds
         } catch (error) {
           console.error("Error fetching song info:", error);
-          // Retry fetching song info after 10 seconds if there is an error
+          // Retry fetching song info after 30 seconds if there is an error
           setTimeout(fetchSongInfo, 30000); // Retry after delay
         }
       }
