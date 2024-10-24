@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+// Replace require with a dynamic import
+const fetch = await import('node-fetch').then(module => module.default);
 
 exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
