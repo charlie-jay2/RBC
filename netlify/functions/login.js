@@ -2,33 +2,45 @@ const connectToDatabase = require('./db');
 
 exports.handler = async (event) => {
     try {
-        console.log("Connecting to database...");
-        const db = await connectToDatabase();
-        console.log("Connected to database!");
-
-        const { username, password } = JSON.parse(event.body);
-        console.log(`Logging in user: ${username}`);
-
-        const user = await db.collection('users').findOne({ username });
-
-        if (user && user.password === password) {
-            console.log("Login successful!");
+        if (event.httpMethod !== 'POST') {
             return {
-                statusCode: 200,
-                body: JSON.stringify({ message: 'Login successful!' }),
+                statusCode: 405,
+                body: JSON.stringify({ message: 'Method Not Allowed' }),
             };
         }
 
-        console.log("Invalid username or password");
-        return {
-            statusCode: 401,
-            body: JSON.stringify({ message: 'Invalid username or password' }),
-        };
+        const { username, password } = JSON.parse(event.body);
+
+        // Check if username and password are provided
+        if (!username || !password) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: 'Missing username or password' }),
+            };
+        }
+
+        // Connect to the database
+        const db = await connectToDatabase();
+        const user = await db.collection('users').findOne({ username });
+
+        if (user && user.password === password) {
+            // Login successful
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'Login successful' }),
+            };
+        } else {
+            // Invalid username or password
+            return {
+                statusCode: 401,
+                body: JSON.stringify({ message: 'Invalid username or password' }),
+            };
+        }
     } catch (error) {
-        console.error("Error during login process", error);
+        console.error("Login error:", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Internal server error' }),
+            body: JSON.stringify({ message: 'Internal Server Error' }),
         };
     }
 };
