@@ -66,7 +66,12 @@
 
       <!-- Song Artwork -->
       <div id="song-artwork">
-        <img id="album-art" src="" alt="Album Art" style="display: none" />
+        <img
+          id="album-art"
+          src=""
+          alt="Album Art"
+          style="display: none"
+          draggable="false" />
       </div>
 
       <!-- Audio Player -->
@@ -200,15 +205,17 @@
 
         async function fetchSongInfo() {
           const songInfoURL =
-            "https://api.typicalmedia.net/api/v1/radioStats?station=26";
+            "https://api.typicalmedia.net/api/v1/radioStats?station=26"; // Adjust the URL if needed
           const response = await fetch(songInfoURL);
           const data = await response.json();
-          songTitle.innerText = data.title;
-          artistName.innerText = data.artist;
+
+          // Update song title and artist
+          songTitle.innerText = data.current_song.title;
+          artistName.innerText = data.current_song.artist;
 
           // Set album art if available
-          if (data.artwork_url) {
-            albumArt.src = data.artwork_url;
+          if (data.current_song.art) {
+            albumArt.src = data.current_song.art;
             albumArt.style.display = "block";
           } else {
             albumArt.style.display = "none";
@@ -217,6 +224,7 @@
 
         // Fetch song info every 10 seconds
         setInterval(fetchSongInfo, 10000);
+        fetchSongInfo(); // Initial fetch
       };
 
       playButton.addEventListener("click", () => {
