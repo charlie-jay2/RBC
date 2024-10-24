@@ -1,15 +1,6 @@
-let fetch;
-
-const loadFetch = async () => {
-    if (!fetch) {
-        const module = await import('node-fetch');
-        fetch = module.default;
-    }
-};
+const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
-    await loadFetch(); // Ensure fetch is loaded
-
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -28,27 +19,18 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Destructure fields from the data
     const { name, discord_username, email, message, contact_method } = data;
 
-    // Check for required fields
-    if (!name || !discord_username || !email || !message || !contact_method || contact_method.length === 0) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ message: 'All fields are required.' }),
-        };
-    }
-
-    const formattedEmail = email || 'N/A';
-    const formattedContactMethod = contact_method.join(', '); // Always use the selected methods
+    const formattedEmail = email;
+    const formattedContactMethod = contact_method?.length > 0 ? contact_method.join(', ') : 'N/A';
 
     const embed = {
         title: "New Contact Form Submission",
         fields: [
-            { name: "Name", value: name, inline: true },
-            { name: "Discord Username", value: discord_username, inline: true },
+            { name: "Name", value: name || "N/A", inline: true },
+            { name: "Discord Username", value: discord_username || "N/A", inline: true },
             { name: "Email", value: formattedEmail, inline: true },
-            { name: "Message", value: message },
+            { name: "Message", value: message || "N/A" },
             { name: "Preferred Contact Method", value: formattedContactMethod, inline: true },
         ],
         color: 7506394,
