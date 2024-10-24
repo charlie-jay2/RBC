@@ -25,7 +25,18 @@
         ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
       /></a>
     </nav>
+    <script>
+      async function checkForReload() {
+        const response = await fetch("/.netlify/functions/triggerReload");
+        const data = await response.json();
+        if (data.shouldReload) {
+          location.reload(); // Reload the page if triggered
+        }
+      }
 
+      // Check for reload every 5 seconds
+      setInterval(checkForReload, 5000);
+    </script>
     <section id="show">
       <h1>Show 1</h1>
       <p>Welcome to Show 1, where we bring you the best hits every day!</p>

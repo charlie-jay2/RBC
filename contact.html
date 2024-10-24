@@ -16,6 +16,18 @@
       content="https://rbc-television.netlify.app/contact" />
     <meta property="og:type" content="website" />
   </head>
+  <script>
+    async function checkForReload() {
+      const response = await fetch("/.netlify/functions/triggerReload");
+      const data = await response.json();
+      if (data.shouldReload) {
+        location.reload(); // Reload the page if triggered
+      }
+    }
+
+    // Check for reload every 5 seconds
+    setInterval(checkForReload, 5000);
+  </script>
   <body>
     <nav>
       <ul>
