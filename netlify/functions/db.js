@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongoose');
+const { MongoClient } = require('mongodb');
 
 
 const uri = process.env.MONGODB_URI; // Your MongoDB connection string
