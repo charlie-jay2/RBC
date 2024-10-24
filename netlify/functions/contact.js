@@ -1,4 +1,4 @@
-const fetch = require('node-fetch'); // Make sure to install node-fetch
+const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
@@ -8,9 +8,19 @@ exports.handler = async (event, context) => {
         };
     }
 
-    const { name, discord_username, email, message, contact_method } = JSON.parse(event.body);
+    let data;
+    try {
+        data = JSON.parse(event.body);
+        console.log("Received data:", data);
+    } catch (error) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ message: 'Invalid JSON body' }),
+        };
+    }
 
-    // Replace empty optional fields with 'N/A'
+    const { name, discord_username, email, message, contact_method } = data;
+
     const formattedEmail = email || 'N/A';
     const formattedContactMethod = contact_method?.length > 0 ? contact_method.join(', ') : 'N/A';
 
@@ -23,7 +33,7 @@ exports.handler = async (event, context) => {
             { name: "Message", value: message || "N/A" },
             { name: "Preferred Contact Method", value: formattedContactMethod, inline: true },
         ],
-        color: 7506394, // Color of the embed (optional)
+        color: 7506394,
     };
 
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL1;
@@ -38,7 +48,8 @@ exports.handler = async (event, context) => {
         });
 
         if (!response.ok) {
-            throw new Error('Error sending message to Discord');
+            const errorDetails = await response.text();
+            throw new Error(`Error sending message to Discord: ${errorDetails}`);
         }
 
         return {
@@ -46,6 +57,7 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({ message: 'Message sent successfully!' }),
         };
     } catch (error) {
+        console.error('Error:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({ message: error.message }),
