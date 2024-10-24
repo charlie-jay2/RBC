@@ -186,6 +186,8 @@
         radio2: null, // Radio2 is unavailable
       };
 
+      let songInfoInterval; // Initialize variable for song info interval
+
       // Function to update the player and logo on station change
       stationSelector.addEventListener("change", () => {
         const selectedStation = stationSelector.value;
@@ -230,18 +232,20 @@
           } else {
             albumArt.style.display = "none";
           }
+
+          // Set a timeout before fetching the next song info
+          setTimeout(fetchSongInfo, 30000); // Delay of 10 seconds
         } catch (error) {
           console.error("Error fetching song info:", error);
+          // Retry fetching song info after 10 seconds if there is an error
+          setTimeout(fetchSongInfo, 30000); // Retry after delay
         }
       }
 
-      // Set default station to Radio1 and start fetching song info every 10 seconds
+      // Set default station to Radio1 and start fetching song info
       window.onload = () => {
         audioPlayer.src = stations.radio1; // Default station
         fetchSongInfo(); // Initial fetch for the first song
-
-        // Fetch song info every 10 seconds
-        songInfoInterval = setInterval(fetchSongInfo, 10000);
       };
 
       playButton.addEventListener("click", () => {
