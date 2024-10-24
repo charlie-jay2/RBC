@@ -1,10 +1,9 @@
-// Instead of using require, we will dynamically import node-fetch
 let fetch;
 
 exports.handler = async (event, context) => {
     // Dynamically import node-fetch
     if (!fetch) {
-        fetch = (await import('node-fetch')).default;
+        fetch = (await import('node-fetch')).then(module => module.default);
     }
 
     if (event.httpMethod !== 'POST') {
