@@ -1,4 +1,3 @@
-// Use a standard dynamic import within an async function
 let fetch;
 
 const loadFetch = async () => {
@@ -29,18 +28,27 @@ exports.handler = async (event, context) => {
         };
     }
 
+    // Destructure fields from the data
     const { name, discord_username, email, message, contact_method } = data;
 
+    // Check for required fields
+    if (!name || !discord_username || !email || !message || !contact_method || contact_method.length === 0) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ message: 'All fields are required.' }),
+        };
+    }
+
     const formattedEmail = email || 'N/A';
-    const formattedContactMethod = contact_method?.length > 0 ? contact_method.join(', ') : 'N/A';
+    const formattedContactMethod = contact_method.join(', '); // Always use the selected methods
 
     const embed = {
         title: "New Contact Form Submission",
         fields: [
-            { name: "Name", value: name || "N/A", inline: true },
-            { name: "Discord Username", value: discord_username || "N/A", inline: true },
+            { name: "Name", value: name, inline: true },
+            { name: "Discord Username", value: discord_username, inline: true },
             { name: "Email", value: formattedEmail, inline: true },
-            { name: "Message", value: message || "N/A" },
+            { name: "Message", value: message },
             { name: "Preferred Contact Method", value: formattedContactMethod, inline: true },
         ],
         color: 7506394,
