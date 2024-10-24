@@ -1,21 +1,20 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-console.log("MongoDB URI:", process.env.MONGODB_URI); // Debug check
-
 const uri = process.env.MONGODB_URI;
 let cachedDb = null;
 
 const connectToDatabase = async () => {
     if (cachedDb) {
-        return cachedDb;
+        return cachedDb;  // Reuse the cached connection
     }
 
     const client = new MongoClient(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        connectTimeoutMS: 30000, // 30 seconds
-        socketTimeoutMS: 45000   // 45 seconds
+        connectTimeoutMS: 30000,  // Increase connect timeout to 30s
+        socketTimeoutMS: 45000,   // Increase socket timeout to 45s
+        maxPoolSize: 10  // Allow pooling to reuse connections
     });
 
     try {
