@@ -131,3 +131,7 @@ footer {
     width: 100px; /* Reduce the size on smaller screens */
   }
 }
+
+#notibar {
+  transition: all 0.3s ease; /* Smooth transition */
+}
