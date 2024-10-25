@@ -275,7 +275,7 @@
         webhookStatus.innerHTML = "";
 
         // Send data to the webhook
-        const response = await fetch("/.netlify/functions/sendWebhook", {
+        const response = await fetch("/.netlify/functions/securityActions", {
           method: "POST",
           body: JSON.stringify({
             code: codeSelect,
