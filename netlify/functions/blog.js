@@ -1,97 +1,71 @@
-const connectToDatabase = require('./db');
-const { ObjectId } = require('mongodb');
+const connectToDatabase = require('./db'); // Ensure this is the correct relative path
+const { Blog } = require('./database'); // Adjust path if necessary
 
 exports.handler = async (event) => {
-    try {
-        const db = await connectToDatabase();
+    const db = await connectToDatabase();
 
-        if (event.httpMethod === 'GET') {
-            if (event.path.includes('/blog/')) {
-                const id = event.path.split('/blog/')[1];
-                const blog = await db.collection('blogs').findOne({ _id: new ObjectId(id) });
-
-                if (blog) {
-                    blog.createdAt = blog.createdAt
-                        ? new Date(blog.createdAt).toLocaleDateString("en-GB", {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric'
-                        })
-                        : 'Date not available';
-                }
-
-                return {
-                    statusCode: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': '*', // Allow all origins for simplicity; restrict this in production
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(blog),
-                };
-            }
-
+    // GET request to fetch all blog posts
+    if (event.httpMethod === 'GET') {
+        try {
             const blogs = await db.collection('blogs').find().toArray();
-            blogs.forEach(blog => {
-                blog.createdAt = blog.createdAt
-                    ? new Date(blog.createdAt).toLocaleDateString("en-GB", {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    })
-                    : 'Date not available';
-            });
-
             return {
                 statusCode: 200,
+                body: JSON.stringify(blogs),
                 headers: {
                     'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(blogs),
+            };
+        } catch (error) {
+            console.error('Error retrieving blogs:', error);
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ message: 'Error retrieving blogs' }),
             };
         }
+    }
 
-        if (event.httpMethod === 'POST') {
-            let parsedBody;
-            try {
-                parsedBody = JSON.parse(event.body);
-            } catch (error) {
-                return {
-                    statusCode: 400,
-                    body: JSON.stringify({ message: 'Invalid JSON' }),
-                };
-            }
+    // POST request to create a new blog post
+    if (event.httpMethod === 'POST') {
+        try {
+            const { title, description, image, author } = JSON.parse(event.body);
 
-            const { title, description, image, author } = parsedBody;
+            const newBlog = {
+                title,
+                description,
+                image,
+                author,
+                createdAt: new Date(),
+            };
 
-            if (!title || !description || !image || !author) {
-                return {
-                    statusCode: 400,
-                    body: JSON.stringify({ message: 'Bad Request: Missing required fields' }),
-                };
-            }
-
-            const createdAt = new Date();
-            await db.collection('blogs').insertOne({ title, description, image, author, createdAt });
+            // Insert the new blog post into the database
+            const result = await db.collection('blogs').insertOne(newBlog);
             return {
                 statusCode: 201,
+                body: JSON.stringify({
+                    message: 'Blog post created successfully!',
+                    blog: {
+                        id: result.insertedId, // Return the inserted ID
+                        ...newBlog, // Return the new blog details
+                    },
+                }),
                 headers: {
                     'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: 'Blog post created' }),
+            };
+        } catch (error) {
+            console.error('Error saving blog post:', error);
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: 'Error saving blog post' }),
             };
         }
-
-        return {
-            statusCode: 405,
-            body: JSON.stringify({ message: 'Method Not Allowed' }),
-        };
-    } catch (error) {
-        console.error("Internal Server Error:", error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Internal Server Error' }),
-        };
     }
+
+    // Handle unsupported methods
+    return {
+        statusCode: 405,
+        body: JSON.stringify({ message: 'Method not allowed' }),
+    };
 };

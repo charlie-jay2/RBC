@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-// Use the connection string directly from the environment variable
 const connectionString = process.env.MONGODB_URI;
 
+// Connect to MongoDB
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB connected"))
     .catch(err => {
