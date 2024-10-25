@@ -11,13 +11,28 @@
   </head>
   <body>
     <nav>
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
       <a href="index.html"
         ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
       /></a>
-      <ul>
+      <ul id="nav-links">
         <li><a href="index.html">Home</a></li>
+        <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
         <li><a href="blogs.html">Blogs</a></li>
-        <li><a href="admin.html">Admin</a></li>
+
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <a href="/shows/show1.html">Show 1</a>
+            <!-- Add more shows here -->
+          </div>
+        </li>
       </ul>
     </nav>
 
@@ -112,25 +127,70 @@
         padding: 0;
       }
 
+      .hamburger {
+        display: none; /* Hidden by default */
+        cursor: pointer; /* Pointer cursor on hover */
+        flex-direction: column; /* Arrange items vertically */
+        padding: 10px; /* Padding for the hamburger */
+      }
+
+      .bar {
+        height: 3px; /* Height of the bars */
+        width: 30px; /* Width of the bars */
+        background-color: white; /* Bar color */
+        margin: 3px 0; /* Margin between bars */
+        transition: 0.4s; /* Transition effect */
+      }
+
+      /* Navigation styles */
       nav {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        display: flex;
-        align-items: center;
+        display: flex; /* Flex layout for nav */
+        justify-content: space-between; /* Space out nav items */
+        align-items: center; /* Center items vertically */
+        padding: 10px; /* Padding around the nav */
       }
 
       nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 15px;
+        list-style: none; /* Remove default list style */
+        display: flex; /* Flex display for the nav items */
+        margin: 0; /* No margin */
+        padding: 0; /* No padding */
+      }
+
+      nav ul li {
+        margin: 0 15px; /* Margin between nav items */
       }
 
       nav a {
-        color: white;
-        text-decoration: none;
+        text-decoration: none; /* No underline for links */
+        color: white; /* Link color */
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex; /* Show hamburger icon on mobile */
+        }
+
+        nav ul {
+          display: none; /* Hide nav items by default on mobile */
+          flex-direction: column; /* Stack nav items vertically */
+          position: absolute; /* Position absolutely */
+          background-color: #333; /* Background color for the menu */
+          top: 60px; /* Position below the navbar */
+          left: 0; /* Align to the left */
+          width: 100%; /* Full width */
+          z-index: 999; /* Ensure it's above other content */
+        }
+
+        nav ul.show {
+          display: flex; /* Show nav items when toggled */
+        }
+
+        nav ul li {
+          margin: 10px 0; /* Vertical margin between items */
+          text-align: center; /* Center align text */
+        }
       }
 
       h1 {
@@ -215,5 +275,22 @@
         color: white;
       }
     </style>
+    <script>
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+      const notibar = document.getElementById("notibar");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+
+        // Toggle Notibar visibility
+        if (navLinks.classList.contains("show")) {
+          notibar.style.display = "none"; // Hide notibar when menu is open
+        } else {
+          notibar.style.display = "block"; // Show notibar when menu is closed
+        }
+      });
+    </script>
   </body>
 </html>

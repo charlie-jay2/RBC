@@ -7,157 +7,9 @@
     <link
       href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
       rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link to the common styles -->
   </head>
-  <style>
-    body {
-      font-family: "Raleway", sans-serif;
-      background-color: #1e1e2e;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-between; /* Distributes space between items */
-      align-items: center; /* Align items vertically */
-      background-color: #333; /* Ensure background color is set */
-      padding: 0 20px; /* Add padding to the left and right */
-    }
-
-    .nav-img {
-      height: 50px; /* Adjust the height as needed */
-      cursor: pointer; /* Change cursor to pointer on hover */
-    }
-
-    nav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      display: flex; /* Use flexbox to layout nav items */
-    }
-
-    nav ul li {
-      margin: 0 10px; /* Add margin between nav items */
-    }
-
-    nav ul li a,
-    .dropbtn {
-      display: inline-block;
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-    }
-
-    nav ul li a:hover,
-    .dropdown:hover .dropbtn {
-      background-color: #333;
-      color: white;
-      transition: 0.3s ease-in-out;
-    }
-
-    nav ul li.dropdown {
-      display: inline-block;
-    }
-
-    nav ul li .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #333;
-      min-width: 160px;
-      z-index: 1;
-    }
-
-    nav ul li .dropdown-content a {
-      color: white;
-      background-color: 333;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      text-align: left;
-    }
-
-    nav ul li .dropdown-content a:hover {
-      background-color: #333;
-      color: white;
-    }
-
-    nav ul li.dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    #login-form {
-      background-color: white;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 550px;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 97%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      border-color: #54794c; /* Highlight border */
-      outline: none;
-    }
-
-    #login-btn {
-      background-color: #333; /* Background color */
-      color: white; /* Text color */
-      padding: 12px 20px; /* Increase thickness and width */
-      border: none; /* Remove border */
-      border-radius: 4px; /* Optional: rounded corners */
-      cursor: pointer; /* Change cursor to pointer */
-      font-size: 16px; /* Optional: increase font size */
-    }
-
-    #login-btn:hover {
-      background-color: #555; /* Darker background on hover */
-    }
-
-    .action-buttons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Three equal columns */
-      gap: 20px; /* Gap between buttons */
-      margin: 20px auto;
-      max-width: 600px; /* Limit the width of the buttons grid */
-      text-align: center; /* Center the text in buttons */
-    }
-
-    .action-button {
-      background-color: #333; /* Background color */
-      color: white; /* Text color */
-      padding: 12px 20px; /* Increase thickness and width */
-      border: none; /* Remove border */
-      border-radius: 4px; /* Optional: rounded corners */
-      cursor: pointer; /* Change cursor to pointer */
-      font-size: 16px; /* Optional: increase font size */
-    }
-
-    .action-button:hover {
-      background-color: #555; /* Darker background on hover */
-    }
-  </style>
   <body>
     <nav>
       <div class="hamburger" id="hamburger">
@@ -165,10 +17,15 @@
         <div class="bar"></div>
         <div class="bar"></div>
       </div>
+      <a href="index.html">
+        <img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img" />
+      </a>
       <ul id="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
+        <li><a href="https://discord.gg/rbctv" target="_blank">Contact</a></li>
         <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+
         <li><a href="radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
@@ -187,10 +44,11 @@
       <button id="login-btn">Login</button>
     </div>
 
-    <!-- Action buttons grid -->
     <div class="action-buttons" style="display: none">
-      <button class="action-button">Blog Creation</button>
-      <button class="action-button">Schedule radio</button>
+      <a href="./adminblogs.html"
+        ><button class="action-button">Blog Creation</button></a
+      >
+      <button class="action-button">Schedule Radio</button>
       <button class="action-button">Security Actions</button>
     </div>
 
@@ -217,9 +75,8 @@
 
         if (response.ok) {
           alert("Login successful!");
-          // Hide the login form
           document.getElementById("login-form").style.display = "none";
-          actionButtons.style.display = "grid"; // Show the action buttons grid
+          actionButtons.style.display = "grid"; // Show action buttons grid
         } else {
           alert("Login failed. Please check your credentials.");
         }
@@ -230,8 +87,133 @@
       const navLinks = document.getElementById("nav-links");
 
       hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+        navLinks.classList.toggle("show");
       });
     </script>
+    <style>
+      body {
+        font-family: "Raleway", sans-serif;
+        background-color: #1e1e2e;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+      }
+      footer {
+        text-align: center;
+        margin-top: 50px;
+      }
+      #login-form {
+        background-color: white;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 550px;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 97%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border-color: #54794c; /* Highlight border */
+        outline: none;
+      }
+      #login-btn {
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #login-btn:hover {
+        background-color: #555; /* Darker background on hover */
+      }
+      .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: center;
+      }
+      .action-button {
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .action-button:hover {
+        background-color: #555; /* Darker background on hover */
+      }
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        flex-direction: column;
+        padding: 10px;
+      }
+      .bar {
+        height: 3px;
+        width: 30px;
+        background-color: white;
+        margin: 3px 0;
+        transition: 0.4s;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+      nav ul li {
+        margin: 0 15px;
+      }
+      nav a {
+        text-decoration: none;
+        color: white;
+      }
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex; /* Show hamburger icon on mobile */
+        }
+        nav ul {
+          display: none; /* Hide nav items by default on mobile */
+          flex-direction: column;
+          position: absolute;
+          background-color: #333;
+          top: 60px;
+          left: 0;
+          width: 100%;
+          z-index: 999;
+        }
+        nav ul.show {
+          display: flex; /* Show nav items when toggled */
+        }
+        nav ul li {
+          margin: 10px 0; /* Vertical margin between items */
+          text-align: center;
+        }
+      }
+    </style>
   </body>
 </html>
