@@ -266,15 +266,11 @@
         ).map((checkbox) => checkbox.value);
 
         // Update the preview with selected values
-        preview.innerHTML = `Selected Code: ${codeSelect}<br>Message: ${embedText}<br>Selected Webhooks: ${selectedWebhooks.join(
+        preview.innerHTML = `Selected Code: ${codeSelect}<br>Message: ${embedText}<br>Webhooks: ${selectedWebhooks.join(
           ", "
         )}`;
-        preview.style.display = "block"; // Show the preview
+        preview.style.display = "block";
 
-        // Clear previous status messages
-        webhookStatus.innerHTML = "";
-
-        // Send data to the webhook
         const response = await fetch("/.netlify/functions/securityActions", {
           method: "POST",
           body: JSON.stringify({
@@ -288,19 +284,16 @@
         });
 
         if (response.ok) {
-          const successMsg = document.createElement("p");
-          successMsg.textContent = "Messages sent successfully!";
-          successMsg.style.color = "#00ff00"; // Green color for success
-          webhookStatus.appendChild(successMsg);
+          const data = await response.json();
+          webhookStatus.textContent = "Message sent successfully!";
+          webhookStatus.style.color = "#00ff00"; // Green for success
         } else {
-          const errorMsg = document.createElement("p");
-          errorMsg.textContent = "Error sending messages!";
-          errorMsg.style.color = "#ff0000"; // Red color for error
-          webhookStatus.appendChild(errorMsg);
+          webhookStatus.textContent = "Failed to send message.";
+          webhookStatus.style.color = "#ff0000"; // Red for error
         }
       });
 
-      // Responsive Navigation Script
+      // Hamburger menu for mobile
       const hamburger = document.getElementById("hamburger");
       const navLinks = document.getElementById("nav-links");
 
