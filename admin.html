@@ -97,26 +97,7 @@
       margin-top: 50px;
     }
 
-    .modal-content {
-      border-radius: 10px;
-    }
-
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1000; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
-      justify-content: center; /* Center the modal */
-      align-items: center; /* Center the modal */
-    }
-
-    #login-form,
-    #post-form {
+    #login-form {
       background-color: white;
       margin: 20px auto;
       padding: 20px;
@@ -140,11 +121,6 @@
       outline: none;
     }
 
-    .login-btn {
-      background-color: #333;
-      color: white;
-    }
-
     #login-btn {
       background-color: #333; /* Background color */
       color: white; /* Text color */
@@ -159,7 +135,16 @@
       background-color: #555; /* Darker background on hover */
     }
 
-    #preview-btn {
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+      gap: 20px; /* Gap between buttons */
+      margin: 20px auto;
+      max-width: 600px; /* Limit the width of the buttons grid */
+      text-align: center; /* Center the text in buttons */
+    }
+
+    .action-button {
       background-color: #333; /* Background color */
       color: white; /* Text color */
       padding: 12px 20px; /* Increase thickness and width */
@@ -169,26 +154,8 @@
       font-size: 16px; /* Optional: increase font size */
     }
 
-    #preview-btn:hover {
+    .action-button:hover {
       background-color: #555; /* Darker background on hover */
-    }
-
-    #submit-btn {
-      background-color: #333; /* Background color */
-      color: white; /* Text color */
-      padding: 12px 20px; /* Increase thickness and width */
-      border: none; /* Remove border */
-      border-radius: 4px; /* Optional: rounded corners */
-      cursor: pointer; /* Change cursor to pointer */
-      font-size: 16px; /* Optional: increase font size */
-    }
-
-    #submit-btn:hover {
-      background-color: #555; /* Darker background on hover */
-    }
-
-    #editor {
-      color: black;
     }
   </style>
   <body>
@@ -220,22 +187,11 @@
       <button id="login-btn">Login</button>
     </div>
 
-    <div id="post-form" style="display: none">
-      <input type="text" id="title" placeholder="Blog Title" required />
-      <div id="editor" style="height: 200px"></div>
-      <input type="text" id="author" placeholder="Author Name" required />
-      <input type="text" id="image" placeholder="Image URL" required />
-      <button id="preview-btn">Preview Blog Post</button>
-      <button id="submit-btn">Submit Blog Post</button>
-    </div>
-
-    <!-- Modal for preview -->
-    <div id="preview-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="close-preview">&times;</span>
-        <h2>Blog Preview</h2>
-        <div id="preview-content"></div>
-      </div>
+    <!-- Action buttons grid -->
+    <div class="action-buttons" style="display: none">
+      <button class="action-button">Blog Creation</button>
+      <button class="action-button">Schedule radio</button>
+      <button class="action-button">Security Actions</button>
     </div>
 
     <footer>
@@ -245,15 +201,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill/dist/quill.min.js"></script>
     <script>
       const loginBtn = document.getElementById("login-btn");
-      const postForm = document.getElementById("post-form");
-      const previewModal = document.getElementById("preview-modal");
-      const previewContent = document.getElementById("preview-content");
-      const submitBtn = document.getElementById("submit-btn");
-
-      // Initialize Quill editor
-      const quill = new Quill("#editor", {
-        theme: "snow",
-      });
+      const actionButtons = document.querySelector(".action-buttons");
 
       loginBtn.addEventListener("click", async () => {
         const username = document.getElementById("username").value;
@@ -271,86 +219,18 @@
           alert("Login successful!");
           // Hide the login form
           document.getElementById("login-form").style.display = "none";
-          postForm.style.display = "block"; // Show the post form
+          actionButtons.style.display = "grid"; // Show the action buttons grid
         } else {
           alert("Login failed. Please check your credentials.");
         }
       });
 
-      document.getElementById("preview-btn").addEventListener("click", () => {
-        const title = document.getElementById("title").value;
-        const author = document.getElementById("author").value;
-        const image = document.getElementById("image").value;
-        const description = quill.root.innerHTML; // Get HTML from Quill
-
-        // Construct preview content
-        previewContent.innerHTML = `
-          <h3>${title}</h3>
-          <p><strong>By:</strong> ${author}</p>
-          <img src="${image}" alt="${title}" style="max-width: 100%;" />
-          <div>${description}</div>
-        `;
-        previewModal.style.display = "flex"; // Show modal
-      });
-
-      document.getElementById("close-preview").addEventListener("click", () => {
-        previewModal.style.display = "none"; // Hide modal
-      });
-
-      // Close modal when clicking outside of it
-      window.onclick = function (event) {
-        if (event.target == previewModal) {
-          previewModal.style.display = "none";
-        }
-      };
-
-      document
-        .getElementById("submit-btn")
-        .addEventListener("click", async () => {
-          const title = document.getElementById("title").value;
-          const description = quill.root.innerHTML; // Get HTML from Quill
-          const author = document.getElementById("author").value;
-          const image = document.getElementById("image").value;
-
-          const response = await fetch("/.netlify/functions/blog", {
-            method: "POST",
-            body: JSON.stringify({
-              title,
-              description,
-              image,
-              author,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (response.ok) {
-            alert("Blog post created successfully!");
-            document.getElementById("title").value = "";
-            document.getElementById("author").value = "";
-            document.getElementById("image").value = "";
-            quill.setText(""); // Clear the editor
-            previewModal.style.display = "none"; // Hide preview after submission
-          } else {
-            alert("Failed to create blog post.");
-          }
-        });
-
       // Hamburger Menu Toggle
       const hamburger = document.getElementById("hamburger");
       const navLinks = document.getElementById("nav-links");
-      const notibar = document.getElementById("notibar");
 
       hamburger.addEventListener("click", () => {
         navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
-
-        // Toggle Notibar visibility
-        if (navLinks.classList.contains("show")) {
-          notibar.style.display = "none"; // Hide notibar when menu is open
-        } else {
-          notibar.style.display = "block"; // Show notibar when menu is closed
-        }
       });
     </script>
   </body>

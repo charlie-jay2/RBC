@@ -1,6 +1,9 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
+console.log("MongoDB URI:", process.env.MONGODB_URI); // Debug check
+
+const uri = process.env.MONGODB_URI;
 let cachedDb = null;
 
 const connectToDatabase = async () => {
@@ -8,14 +11,16 @@ const connectToDatabase = async () => {
         return cachedDb;
     }
 
-    const client = new MongoClient(process.env.MONGODB_URI, {
+    const client = new MongoClient(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        connectTimeoutMS: 30000, // 30 seconds
+        socketTimeoutMS: 45000   // 45 seconds
     });
 
     try {
         await client.connect();
-        cachedDb = client.db('RBCBlogs'); // Change to your DB name if necessary
+        cachedDb = client.db('RBCBlogs');
         return cachedDb;
     } catch (err) {
         console.error("MongoDB connection error:", err);
@@ -23,4 +28,4 @@ const connectToDatabase = async () => {
     }
 };
 
-module.exports = connectToDatabase; // Ensure this line is present
+module.exports = connectToDatabase;
