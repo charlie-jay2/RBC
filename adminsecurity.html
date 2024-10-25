@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - RBC Television</title>
     <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap"
+      rel="stylesheet" />
+    <link
       href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
       rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
@@ -84,27 +87,6 @@
       margin-top: 50px;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: #333;
-      color: white;
-      border-radius: 10px;
-      padding: 20px;
-    }
-
     #login-form,
     #security-form {
       background-color: white;
@@ -155,8 +137,19 @@
       border: 1px solid #54794c;
     }
 
-    #editor {
-      color: black;
+    .webhook-option {
+      margin: 10px 0;
+      font-weight: bold; /* Bold font for webhook options */
+      font-family: "Raleway", sans-serif; /* Raleway font */
+    }
+
+    .webhook-option input {
+      margin-right: 10px; /* Space between checkbox and label */
+    }
+
+    .webhook-status {
+      margin: 10px 0;
+      color: #00ff00; /* Default to green for success */
     }
   </style>
   <body>
@@ -174,7 +167,6 @@
         <li><a href="https://discord.gg/rbctv" target="_blank">Contact</a></li>
         <li><a href="our-team.html">Our Team</a></li>
         <li><a href="blogs.html">Blogs</a></li>
-
         <li><a href="radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
@@ -198,34 +190,39 @@
       <label for="codeSelect">Select a Security Code:</label>
       <select id="codeSelect" name="codeSelect" required>
         <option value="codeGreen">Code Green</option>
-        <option value="codeBlue">Code Blue</option>
         <option value="codeYellow">Code Yellow</option>
-        <option value="codeOrange">Code Orange</option>
+        <option value="codeBlue">Code Blue</option>
         <option value="codeRed">Code Red</option>
         <option value="codePurple">Code Purple</option>
       </select>
 
-      <label for="embedText">What do you want the embed to say:</label>
-      <input type="text" id="embedText" name="embedText" required />
+      <label for="embedText">Embed Message:</label>
+      <input
+        type="text"
+        id="embedText"
+        name="embedText"
+        placeholder="Enter your message here..."
+        required />
 
       <div>
         <h3>Select Webhook Channels:</h3>
-        <label
-          ><input type="checkbox" name="webhook" value="webhook1" /> Webhook URL
-          1</label
-        ><br />
-        <label
-          ><input type="checkbox" name="webhook" value="webhook2" /> Webhook URL
-          2</label
-        ><br />
-        <label
-          ><input type="checkbox" name="webhook" value="webhook3" /> Webhook URL
-          3</label
-        ><br />
+        <div class="webhook-option">
+          <input type="checkbox" name="webhook" value="webhook1" />
+          Webhook URL 1
+        </div>
+        <div class="webhook-option">
+          <input type="checkbox" name="webhook" value="webhook2" />
+          Webhook URL 2
+        </div>
+        <div class="webhook-option">
+          <input type="checkbox" name="webhook" value="webhook3" />
+          Webhook URL 3
+        </div>
       </div>
 
       <button id="submit-btn">Send Security Action</button>
       <div id="preview" style="display: none"></div>
+      <div id="webhook-status" style="margin-top: 10px"></div>
     </div>
 
     <footer>
@@ -237,6 +234,7 @@
       const securityForm = document.getElementById("security-form");
       const submitBtn = document.getElementById("submit-btn");
       const preview = document.getElementById("preview");
+      const webhookStatus = document.getElementById("webhook-status");
 
       loginBtn.addEventListener("click", async () => {
         const username = document.getElementById("username").value;
@@ -267,46 +265,48 @@
           document.querySelectorAll('input[name="webhook"]:checked')
         ).map((checkbox) => checkbox.value);
 
-        const data = {
-          codeSelect,
-          embedText,
-          webhooks: selectedWebhooks,
-        };
+        // Update the preview with selected values
+        preview.innerHTML = `Selected Code: ${codeSelect}<br>Message: ${embedText}<br>Selected Webhooks: ${selectedWebhooks.join(
+          ", "
+        )}`;
+        preview.style.display = "block"; // Show the preview
 
-        const response = await fetch("/.netlify/functions/securityactions", {
+        // Clear previous status messages
+        webhookStatus.innerHTML = "";
+
+        // Send data to the webhook
+        const response = await fetch("/.netlify/functions/sendWebhook", {
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            code: codeSelect,
+            message: embedText,
+            webhooks: selectedWebhooks,
+          }),
           headers: {
             "Content-Type": "application/json",
           },
         });
 
         if (response.ok) {
-          alert("Action submitted successfully!");
-          preview.style.display = "block"; // Show the preview
-          preview.textContent = `Submitted Action: ${embedText}`; // Display the submitted action
-          document.getElementById("embedText").value = ""; // Clear the input field
+          const successMsg = document.createElement("p");
+          successMsg.textContent = "Messages sent successfully!";
+          successMsg.style.color = "#00ff00"; // Green color for success
+          webhookStatus.appendChild(successMsg);
         } else {
-          alert("Failed to submit action.");
+          const errorMsg = document.createElement("p");
+          errorMsg.textContent = "Error sending messages!";
+          errorMsg.style.color = "#ff0000"; // Red color for error
+          webhookStatus.appendChild(errorMsg);
         }
       });
 
-      // Optional: Add a click event to each checkbox to update the preview in real-time
-      document.querySelectorAll('input[name="webhook"]').forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-          updatePreview();
-        });
-      });
+      // Responsive Navigation Script
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
 
-      function updatePreview() {
-        const embedText = document.getElementById("embedText").value;
-        const selectedWebhooks = Array.from(
-          document.querySelectorAll('input[name="webhook"]:checked')
-        ).map((checkbox) => checkbox.value);
-        preview.textContent = `Submitted Action: ${embedText} (Webhooks: ${selectedWebhooks.join(
-          ", "
-        )})`;
-      }
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show");
+      });
     </script>
   </body>
 </html>
