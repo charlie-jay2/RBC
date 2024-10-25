@@ -1,5 +1,3 @@
-// blog.js
-
 const connectToDatabase = require('./db');
 const { ObjectId } = require('mongodb');
 
@@ -24,6 +22,10 @@ exports.handler = async (event) => {
 
                 return {
                     statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*', // Allow all origins for simplicity; restrict this in production
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(blog),
                 };
             }
@@ -41,6 +43,10 @@ exports.handler = async (event) => {
 
             return {
                 statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(blogs),
             };
         }
@@ -69,6 +75,10 @@ exports.handler = async (event) => {
             await db.collection('blogs').insertOne({ title, description, image, author, createdAt });
             return {
                 statusCode: 201,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ message: 'Blog post created' }),
             };
         }

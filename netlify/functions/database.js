@@ -1,5 +1,3 @@
-// database.js
-
 const mongoose = require('mongoose');
 
 // Use the connection string directly from the environment variable
