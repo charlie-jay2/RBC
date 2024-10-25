@@ -139,7 +139,6 @@
         <li><a href="https://discord.gg/rbctv" target="_blank">Contact</a></li>
         <li><a href="our-team.html">Our Team</a></li>
         <li><a href="blogs.html">Blogs</a></li>
-
         <li><a href="radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
@@ -153,22 +152,14 @@
     <script>
       const hamburger = document.getElementById("hamburger");
       const navLinks = document.getElementById("nav-links");
-      const notibar = document.getElementById("notibar");
 
       hamburger.addEventListener("click", () => {
         navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
-
-        // Toggle Notibar visibility
-        if (navLinks.classList.contains("show")) {
-          notibar.style.display = "none"; // Hide notibar when menu is open
-        } else {
-          notibar.style.display = "block"; // Show notibar when menu is closed
-        }
       });
     </script>
     <h1>Contact Us</h1>
     <form id="contactForm">
-      <label for="name">Name:</label>
+      <label for="name">Discord Name:</label>
       <input type="text" id="name" name="name" required />
 
       <label for="email">Email:</label>
@@ -183,7 +174,8 @@
           <input type="checkbox" name="contactPreference" value="Email" /> Email
         </label>
         <label>
-          <input type="checkbox" name="contactPreference" value="Phone" /> Phone
+          <input type="checkbox" name="contactPreference" value="Discord" />
+          Discord
         </label>
       </fieldset>
 
@@ -210,7 +202,6 @@
 
           try {
             const response = await fetch("/.netlify/functions/contactForm", {
-              // Fetching from the Netlify function
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -218,14 +209,16 @@
               body: JSON.stringify({ name, email, message, contactPreference }),
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-              responseMessage.textContent = "Form submitted successfully!";
-              responseMessage.style.color = "green";
-            } else {
-              throw new Error(data.error || "An error occurred");
+            // Check if response is OK
+            if (!response.ok) {
+              const errorData = await response.json(); // Read the error response
+              throw new Error(errorData.error || "An error occurred");
             }
+
+            const data = await response.json(); // Read success response
+
+            responseMessage.textContent = "Form submitted successfully!";
+            responseMessage.style.color = "green";
           } catch (error) {
             responseMessage.textContent = "Error: " + error.message;
             responseMessage.style.color = "red";
