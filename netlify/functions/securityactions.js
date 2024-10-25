@@ -1,44 +1,63 @@
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 
-exports.handler = async (event, context) => {
-    if (event.httpMethod === "POST") {
-        const { code, message, webhooks } = JSON.parse(event.body);
+// Your Discord Webhook URLs
+const webhookURL1 = process.env.DISCORD_WEBHOOK_URL_1;
+const webhookURL2 = process.env.DISCORD_WEBHOOK_URL_2;
+const webhookURL3 = process.env.DISCORD_WEBHOOK_URL_3;
 
-        // Check if webhooks are provided
-        if (!webhooks || webhooks.length === 0) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: "No webhooks selected." }),
-            };
-        }
-
-        try {
-            // Loop through selected webhooks and send the message
-            for (const webhookUrl of webhooks) {
-                await fetch(webhookUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        content: `**Security Code:** ${code}\n**Message:** ${message}`,
-                    }),
-                });
-            }
-
-            return {
-                statusCode: 200,
-                body: JSON.stringify({ message: "Message sent successfully!" }),
-            };
-        } catch (error) {
-            console.error("Error sending message:", error);
-            return {
-                statusCode: 500,
-                body: JSON.stringify({ error: "Error sending message." }),
-            };
-        }
-    }
-
+// Function to create the embed message
+function createEmbedMessage(code, message, imageUrl) {
     return {
-        statusCode: 405,
-        body: JSON.stringify({ error: "Method not allowed" }),
+        embeds: [
+            {
+                title: code,
+                description: message,
+                image: {
+                    url: imageUrl,
+                },
+                color: 0x00ff00, // You can change this color if needed
+            },
+        ],
     };
+}
+
+// Main handler
+exports.handler = async (event, context) => {
+    const { code, message, webhooks } = JSON.parse(event.body);
+
+    let webhookUrls = [];
+    if (webhooks.includes("webhook1")) webhookUrls.push(webhookURL1);
+    if (webhooks.includes("webhook2")) webhookUrls.push(webhookURL2);
+    if (webhooks.includes("webhook3")) webhookUrls.push(webhookURL3);
+
+    const imageUrl = "https://example.com/your-image.jpg"; // Replace with your actual image URL
+
+    // Send messages to selected webhooks
+    const promises = webhookUrls.map(async (url) => {
+        const embedMessage = createEmbedMessage(code, message, imageUrl);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(embedMessage),
+        });
+
+        if (!response.ok) {
+            console.error(`Failed to send message to webhook: ${url}, Status: ${response.status}`);
+            throw new Error(`Webhook failed with status ${response.status}`);
+        }
+        return response.json();
+    });
+
+    try {
+        await Promise.all(promises);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'Messages sent successfully!' }),
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message }),
+        };
+    }
 };
