@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
 
             const selectedCode = body.codeSelect;
             const embedText = body.embedText;
-            const selectedWebhooks = body.webhook || []; // Default to an empty array if undefined
+            const selectedWebhooks = body.webhooks || []; // Ensure we use the correct key
 
             // Check if selectedWebhooks is an array
             if (!Array.isArray(selectedWebhooks)) {
@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
                 description: embedText,
                 color: 0xFF9999, // Salmon pink color in hexadecimal
                 image: {
-                    url: images[selectedCode]
+                    url: images[selectedCode] || '' // Use a default image or empty string if not found
                 }
             };
 
@@ -52,6 +52,12 @@ exports.handler = async (event, context) => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ embeds: [embed] })
                     });
+
+                    // Check for successful response
+                    if (!response.ok) {
+                        throw new Error(`Webhook request failed for ${webhook}: ${response.statusText}`);
+                    }
+
                     return response.json();
                 }
             });
