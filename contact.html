@@ -7,7 +7,165 @@
     <link rel="stylesheet" href="styles.css" />
     <!-- Optional: link to your CSS file -->
   </head>
+  <style>
+    body {
+      font-family: "Raleway", sans-serif;
+    }
+
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      flex-direction: column;
+      padding: 10px;
+    }
+    .bar {
+      height: 3px;
+      width: 30px;
+      background-color: white;
+      margin: 3px 0;
+      transition: 0.4s;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 0 15px;
+    }
+    nav a {
+      text-decoration: none;
+      color: white;
+    }
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex; /* Show hamburger icon on mobile */
+      }
+      nav ul {
+        display: none; /* Hide nav items by default on mobile */
+        flex-direction: column;
+        position: absolute;
+        background-color: #333;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+      }
+      nav ul.show {
+        display: flex; /* Show nav items when toggled */
+      }
+      nav ul li {
+        margin: 10px 0; /* Vertical margin between items */
+        text-align: center;
+      }
+    }
+
+    #contactForm {
+      background-color: white; /* White background for the form */
+      padding: 20px; /* Padding inside the form */
+      border-radius: 8px; /* Rounded corners */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      width: 300px; /* Fixed width for the form */
+      max-width: 90%; /* Max width to prevent clipping */
+      display: flex;
+      flex-direction: column; /* Stack elements vertically */
+      gap: 15px; /* Space between elements */
+      color: black;
+      margin: 0 auto; /* Center the form horizontally */
+    }
+
+    /* Responsive Styles for Mobile */
+    @media (max-width: 768px) {
+      #contactForm {
+        width: 100%; /* Full width on smaller screens */
+        padding: 15px; /* Adjust padding if needed */
+      }
+    }
+
+    label {
+      margin-bottom: 5px; /* Space between label and input */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      padding: 10px; /* Padding inside inputs */
+      border: 1px solid #ccc; /* Light gray border */
+      border-radius: 4px; /* Rounded corners */
+      width: 100%; /* Full width of the form */
+      box-sizing: border-box; /* Include padding and border in element's total width */
+    }
+
+    button {
+      padding: 10px;
+      background-color: #333; /* Primary color for the button */
+      color: white; /* White text */
+      border: none; /* Remove border */
+      border-radius: 4px; /* Rounded corners */
+      cursor: pointer; /* Pointer cursor on hover */
+      height: 50px;
+      font-size: xx-large;
+    }
+
+    button:hover {
+      background-color: #4b703e; /* Darker shade on hover */
+    }
+
+    #responseMessage {
+      margin-top: 15px; /* Space between form and response message */
+      text-align: center; /* Center align response message */
+    }
+  </style>
   <body>
+    <nav>
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <a href="index.html">
+        <img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img" />
+      </a>
+      <ul id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="https://discord.gg/rbctv" target="_blank">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <a href="/shows/show1.html">Show 1</a>
+            <!-- Add more shows here -->
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <script>
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+      const notibar = document.getElementById("notibar");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+
+        // Toggle Notibar visibility
+        if (navLinks.classList.contains("show")) {
+          notibar.style.display = "none"; // Hide notibar when menu is open
+        } else {
+          notibar.style.display = "block"; // Show notibar when menu is closed
+        }
+      });
+    </script>
     <h1>Contact Us</h1>
     <form id="contactForm">
       <label for="name">Name:</label>
