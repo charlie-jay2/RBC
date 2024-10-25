@@ -27,7 +27,7 @@ exports.handler = async (event) => {
     try {
         await fetch(webhookURL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'applicataion/json' },
             body,
         });
 

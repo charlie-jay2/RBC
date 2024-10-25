@@ -3,254 +3,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us - RBC Television</title>
+    <title>Contact Us</title>
     <link rel="stylesheet" href="styles.css" />
-
-    <meta property="og:title" content="Contact RBC Television" />
-    <meta
-      property="og:description"
-      content="Contact us through the form below." />
-    <meta
-      property="og:image"
-      content="https://rbc-television.netlify.app/assets/RBCWhite.png" />
-    <meta
-      property="og:url"
-      content="https://rbc-television.netlify.app/contact.html" />
-    <meta property="og:type" content="website" />
-    <script src="notibar.js" defer></script>
-    <script>
-      async function checkForReload() {
-        const response = await fetch("/.netlify/functions/triggerReload");
-        const data = await response.json();
-        if (data.shouldReload) {
-          location.reload(); // Reload the page if triggered
-        }
-      }
-
-      // Check for reload every 5 seconds
-      setInterval(checkForReload, 5000);
-    </script>
-    <style>
-      /* (Your existing CSS styles) */
-
-      /* Form Styles */
-      #contact-form {
-        background-color: white;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
-        margin: 0 auto; /* Center the form */
-        color: black;
-      }
-
-      #contact-form h2 {
-        margin-bottom: 20px;
-      }
-
-      #contact-form label {
-        display: block;
-        margin-bottom: 5px;
-      }
-
-      #contact-form input,
-      #contact-form textarea {
-        width: 97%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      #contact-form button {
-        background-color: #54794c; /* Primary color */
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      #contact-form button:hover {
-        background-color: #4c6e43; /* Darker shade for hover effect */
-      }
-
-      /* Checkbox Styles */
-      .checkbox-group {
-        display: flex;
-        align-items: center; /* Center align checkbox and label vertically */
-        margin-bottom: 5px; /* Reduced margin for closer spacing */
-      }
-
-      .checkbox-label {
-        margin-right: 10px; /* Space between label and checkbox */
-        line-height: 20px; /* Align label vertically with checkbox */
-      }
-
-      .checkbox-group input[type="checkbox"] {
-        width: 20px; /* Width of checkbox */
-        height: 20px; /* Height of checkbox */
-        cursor: pointer; /* Pointer cursor on hover */
-      }
-
-      /* Hamburger Menu Styles */
-      .hamburger {
-        display: none; /* Hidden by default */
-        cursor: pointer; /* Pointer cursor on hover */
-        flex-direction: column; /* Arrange items vertically */
-        padding: 10px; /* Padding for the hamburger */
-      }
-
-      .bar {
-        height: 3px; /* Height of the bars */
-        width: 30px; /* Width of the bars */
-        background-color: white; /* Bar color */
-        margin: 3px 0; /* Margin between bars */
-        transition: 0.4s; /* Transition effect */
-      }
-
-      /* Navigation styles */
-      nav {
-        display: flex; /* Flex layout for nav */
-        justify-content: space-between; /* Space out nav items */
-        align-items: center; /* Center items vertically */
-        padding: 10px; /* Padding around the nav */
-      }
-
-      nav ul {
-        list-style: none; /* Remove default list style */
-        display: flex; /* Flex display for the nav items */
-        margin: 0; /* No margin */
-        padding: 0; /* No padding */
-      }
-
-      nav ul li {
-        margin: 0 15px; /* Margin between nav items */
-      }
-
-      nav a {
-        text-decoration: none; /* No underline for links */
-        color: white; /* Link color */
-      }
-
-      /* Responsive Styles */
-      @media (max-width: 768px) {
-        .hamburger {
-          display: flex; /* Show hamburger icon on mobile */
-        }
-
-        nav ul {
-          display: none; /* Hide nav items by default on mobile */
-          flex-direction: column; /* Stack nav items vertically */
-          position: absolute; /* Position absolutely */
-          background-color: #333; /* Background color for the menu */
-          top: 60px; /* Position below the navbar */
-          left: 0; /* Align to the left */
-          width: 100%; /* Full width */
-          z-index: 999; /* Ensure it's above other content */
-        }
-
-        nav ul.show {
-          display: flex; /* Show nav items when toggled */
-        }
-
-        nav ul li {
-          margin: 10px 0; /* Vertical margin between items */
-          text-align: center; /* Center align text */
-        }
-      }
-    </style>
+    <!-- Optional: link to your CSS file -->
   </head>
   <body>
-    <nav>
-      <div class="hamburger" id="hamburger">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-      <a href="index.html"
-        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
-      /></a>
-      <ul id="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
-        <li><a href="our-team.html">Our Team</a></li>
-        <li><a href="blogs.html">Blogs</a></li>
-        <li><a href="radio.html">Radio</a></li>
-        <li class="dropdown">
-          <a href="javascript:void(0)" class="dropbtn">Shows</a>
-          <div class="dropdown-content">
-            <a href="/shows/show1.html">Show 1</a>
-            <!-- Add more shows here -->
-          </div>
-        </li>
-      </ul>
-    </nav>
+    <h1>Contact Us</h1>
+    <form id="contactForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
 
-    <div id="notibar">
-      <!-- Notibar content will be dynamically added by notibar.js -->
-    </div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
 
-    <section id="contact" style="padding: 20px">
-      <h1>Contact Us</h1>
-      <div id="contact-form">
-        <h2>Get in Touch</h2>
-        <form
-          id="form"
-          method="POST"
-          action="/.netlify/functions/contactForm.js">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required />
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" required></textarea>
 
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required />
+      <fieldset>
+        <legend>Preferred Contact Method:</legend>
+        <label>
+          <input type="checkbox" name="contactPreference" value="Email" /> Email
+        </label>
+        <label>
+          <input type="checkbox" name="contactPreference" value="Phone" /> Phone
+        </label>
+      </fieldset>
 
-          <label for="message">Message:</label>
-          <textarea id="message" name="message" rows="4" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
 
-          <label>Preferred Contact Method:</label>
-          <div class="checkbox-group">
-            <input
-              type="checkbox"
-              id="contact-preference-email"
-              name="contactPreference"
-              value="email" />
-            <span class="checkbox-label">Email</span>
-          </div>
-          <div class="checkbox-group">
-            <input
-              type="checkbox"
-              id="contact-preference-discord"
-              name="contactPreference"
-              value="discord" />
-            <span class="checkbox-label">Discord</span>
-          </div>
-
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    </section>
-
-    <footer>
-      <p>&copy; 2024 RBC Television. All rights reserved.</p>
-    </footer>
+    <div id="responseMessage"></div>
 
     <script>
-      // Hamburger Menu Toggle
-      const hamburger = document.getElementById("hamburger");
-      const navLinks = document.getElementById("nav-links");
-      const notibar = document.getElementById("notibar");
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent the default form submission
 
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+          // Collect form data
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+          const contactPreference = Array.from(
+            document.querySelectorAll('input[name="contactPreference"]:checked')
+          ).map((el) => el.value);
 
-        // Toggle Notibar visibility
-        if (navLinks.classList.contains("show")) {
-          notibar.style.display = "none"; // Hide notibar when menu is open
-        } else {
-          notibar.style.display = "block"; // Show notibar when menu is closed
-        }
-      });
+          const responseMessage = document.getElementById("responseMessage");
+
+          try {
+            const response = await fetch("/.netlify/functions/contactForm", {
+              // Fetching from the Netlify function
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name, email, message, contactPreference }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              responseMessage.textContent = "Form submitted successfully!";
+              responseMessage.style.color = "green";
+            } else {
+              throw new Error(data.error || "An error occurred");
+            }
+          } catch (error) {
+            responseMessage.textContent = "Error: " + error.message;
+            responseMessage.style.color = "red";
+          }
+        });
     </script>
   </body>
 </html>
