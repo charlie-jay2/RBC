@@ -1,114 +1,137 @@
-// contactForm.js
-
 exports.handler = async (event) => {
-    if (event.httpMethod !== 'POST') {
+    // Check if the request method is POST
+    if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
-            body: JSON.stringify({ error: 'Method Not Allowed' }),
+            body: JSON.stringify({ error: "Method Not Allowed" })
         };
     }
 
-    let body;
+    // Log the entire event body to see the structure
+    console.log("Full Event Body:", event.body);
+
+    let securityCode, webhooks;
     try {
-        body = JSON.parse(event.body); // Parse the request body
+        const body = JSON.parse(event.body); // Parse the request body
+        console.log("Parsed Body:", body);
+
+        securityCode = body.securityCode; // Extract the security code
+        webhooks = body.webhooks; // Extract the webhooks array
+
+        console.log("Security Code:", securityCode);
+        console.log("Webhooks:", webhooks);
+
+        // Validate the input data
+        if (!securityCode || !Array.isArray(webhooks) || webhooks.length === 0) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "Invalid request data" })
+            };
+        }
     } catch (error) {
+        console.error("Failed to parse request body:", error);
         return {
             statusCode: 400,
-            body: JSON.stringify({ error: 'Invalid request body' }),
+            body: JSON.stringify({ error: "Invalid request body format" })
         };
     }
 
-    const { code, message, webhooks } = body;
-    const webhookURLs = {
-        webhook1: process.env.DISCORD_WEBHOOK_URL1,
-        webhook2: process.env.DISCORD_WEBHOOK_URL2,
-        webhook3: process.env.DISCORD_WEBHOOK_URL3
-    };
-    const selectedWebhooks = webhooks.map(name => webhookURLs[name]).filter(Boolean);
-
-    // Case-based preset image URL, title, and color for each code
+    // Set up embed settings based on the security code
     let embedSettings;
-    switch (code) {
+    switch (securityCode) {
+        case 'codeRed':
+            embedSettings = {
+                title: "Code Red Alert",
+                color: 0xff0000,
+                imageUrl: "https://cdn.discordapp.com/emojis/939459951079129109.png"
+            };
+            break;
+        case 'codeAmber':
+            embedSettings = {
+                title: "Code Amber Alert",
+                color: 0xffbf00,
+                imageUrl: "https://cdn.discordapp.com/emojis/783279693056212038.png"
+            };
+            break;
+        case 'codeOrange':
+            embedSettings = {
+                title: "Code Orange Alert",
+                color: 0xffa500,
+                imageUrl: "https://cdn.discordapp.com/emojis/1297639479053520936.png"
+            };
+            break;
         case 'codeGreen':
             embedSettings = {
                 title: "Code Green Alert",
                 color: 0x00ff00,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297634914388410538.png"
-            };
-            break;
-        case 'codeYellow':
-            embedSettings = {
-                title: "Code Yellow Alert",
-                color: 0xffff00,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297638454573924493.png"
+                imageUrl: "https://cdn.discordapp.com/emojis/1297639479053520936.png"
             };
             break;
         case 'codeBlue':
             embedSettings = {
                 title: "Code Blue Alert",
                 color: 0x0000ff,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297634914388410538.png"
+                imageUrl: "https://cdn.discordapp.com/emojis/123456789012345678.png" // Replace with a valid URL for blue alert emoji
             };
             break;
-        case 'codeOrange':
+        case 'codeYellow':
             embedSettings = {
-                title: "Code Orange Alert",
-                color: 0x0000ff,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297639479053520936.png"
-            }
-        case 'codeRed':
-            embedSettings = {
-                title: "Code Red Alert",
-                color: 0xff0000,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297640061822828716.png"
-            };
-            break;
-        case 'codePurple':
-            embedSettings = {
-                title: "Code Purple Alert",
-                color: 0x800080,
-                imageUrl: "https://cdn.discordapp.com/emojis/1297640648710553651.png"
+                title: "Code Yellow Alert",
+                color: 0xffff00, // Yellow color
+                imageUrl: "https://cdn.discordapp.com/emojis/123456789012345678.png" // Replace with a valid URL for yellow alert emoji
             };
             break;
         default:
             return {
                 statusCode: 400,
-                body: JSON.stringify({ error: 'Invalid code selected' }),
+                body: JSON.stringify({ error: "Invalid security code" })
             };
     }
 
-    // Discord embed object
-    const embed = {
-        title: embedSettings.title,
-        description: message || "No message provided",
-        color: embedSettings.color,
-        image: { url: embedSettings.imageUrl },
-        fields: [{ name: "Alert Code", value: code }]
-    };
-
-    // Send message to each selected webhook
+    // Send alerts to webhooks
     try {
-        await Promise.all(selectedWebhooks.map(async (url) => {
-            const response = await fetch(url, {
+        const responses = await Promise.all(webhooks.map(async (webhookURL) => {
+            // Use fetch to send the POST request
+            const response = await fetch(webhookURL, {
                 method: "POST",
-                body: JSON.stringify({ embeds: [embed] }),
+                body: JSON.stringify({
+                    embeds: [{
+                        title: embedSettings.title,
+                        color: embedSettings.color,
+                        image: { url: embedSettings.imageUrl }
+                    }]
+                }),
                 headers: { "Content-Type": "application/json" },
             });
 
+            // Check for successful response
             if (!response.ok) {
-                throw new Error('Failed to send message to Discord');
+                const errorData = await response.json(); // Read error response
+                throw new Error(errorData.error || 'Failed to send message to Discord');
             }
+
+            console.log(`Response from ${webhookURL}:`, response.status);
+            return response; // Return the response
         }));
+
+        // Check for failed responses
+        const failedResponses = responses.filter(res => res.status !== 200);
+        if (failedResponses.length > 0) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ error: "Some webhooks failed" })
+            };
+        }
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'Alert sent successfully!' }),
+            body: JSON.stringify({ message: "Alert sent successfully!" })
         };
     } catch (error) {
-        console.error('Error sending message to Discord:', error);
+        console.error("Error sending alerts:", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to send message to Discord' }),
+            body: JSON.stringify({ error: "Server error" })
         };
     }
 };

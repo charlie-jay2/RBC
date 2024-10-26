@@ -53,13 +53,12 @@
       text-decoration: none;
       color: white;
     }
-    /* Responsive Styles */
     @media (max-width: 768px) {
       .hamburger {
-        display: flex; /* Show hamburger icon on mobile */
+        display: flex;
       }
       nav ul {
-        display: none; /* Hide nav items by default on mobile */
+        display: none;
         flex-direction: column;
         position: absolute;
         background-color: #333;
@@ -69,10 +68,10 @@
         z-index: 999;
       }
       nav ul.show {
-        display: flex; /* Show nav items when toggled */
+        display: flex;
       }
       nav ul li {
-        margin: 10px 0; /* Vertical margin between items */
+        margin: 10px 0;
         text-align: center;
       }
     }
@@ -139,17 +138,17 @@
 
     .webhook-option {
       margin: 10px 0;
-      font-weight: bold; /* Bold font for webhook options */
-      font-family: "Raleway", sans-serif; /* Raleway font */
+      font-weight: bold;
+      font-family: "Raleway", sans-serif;
     }
 
     .webhook-option input {
-      margin-right: 10px; /* Space between checkbox and label */
+      margin-right: 10px;
     }
 
     .webhook-status {
       margin: 10px 0;
-      color: #00ff00; /* Default to green for success */
+      color: #00ff00;
     }
   </style>
   <body>
@@ -172,7 +171,6 @@
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
           <div class="dropdown-content">
             <a href="/shows/show1.html">Show 1</a>
-            <!-- Add more shows here -->
           </div>
         </li>
       </ul>
@@ -190,8 +188,9 @@
       <label for="codeSelect">Select a Security Code:</label>
       <select id="codeSelect" name="codeSelect" required>
         <option value="codeGreen">Code Green</option>
-        <option value="codeYellow">Code Yellow</option>
         <option value="codeBlue">Code Blue</option>
+        <option value="codeYellow">Code Yellow</option>
+        <option value="codeOrange">Code Orange</option>
         <option value="codeRed">Code Red</option>
         <option value="codePurple">Code Purple</option>
       </select>
@@ -250,9 +249,8 @@
 
         if (response.ok) {
           alert("Login successful!");
-          // Hide the login form
           document.getElementById("login-form").style.display = "none";
-          securityForm.style.display = "block"; // Show the security actions form
+          securityForm.style.display = "block";
         } else {
           alert("Login failed. Please check your credentials.");
         }
@@ -260,12 +258,11 @@
 
       submitBtn.addEventListener("click", async () => {
         const codeSelect = document.getElementById("codeSelect").value;
-        const embedText = document.getElementById("embedText").value;
+        const embedText = document.getElementById("embedText").value; // If this needs to be sent, ensure your server function can handle it.
         const selectedWebhooks = Array.from(
           document.querySelectorAll('input[name="webhook"]:checked')
         ).map((checkbox) => checkbox.value);
 
-        // Update the preview with selected values
         preview.innerHTML = `Selected Code: ${codeSelect}<br>Message: ${embedText}<br>Webhooks: ${selectedWebhooks.join(
           ", "
         )}`;
@@ -274,31 +271,21 @@
         const response = await fetch("/.netlify/functions/securityActions", {
           method: "POST",
           body: JSON.stringify({
-            code: codeSelect,
-            message: embedText,
+            securityCode: codeSelect, // Corrected from `code` to `securityCode`
             webhooks: selectedWebhooks,
           }),
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", // Corrected header to match
           },
         });
 
         if (response.ok) {
-          const data = await response.json();
-          webhookStatus.textContent = "Message sent successfully!";
-          webhookStatus.style.color = "#00ff00"; // Green for success
+          const responseData = await response.json();
+          webhookStatus.innerHTML = `<span class="webhook-status">Alert sent: ${responseData.message}</span>`;
         } else {
-          webhookStatus.textContent = "Failed to send message.";
-          webhookStatus.style.color = "#ff0000"; // Red for error
+          const errorData = await response.json();
+          webhookStatus.innerHTML = `<span class="webhook-status" style="color: red;">Error: ${errorData.error}</span>`;
         }
-      });
-
-      // Hamburger menu for mobile
-      const hamburger = document.getElementById("hamburger");
-      const navLinks = document.getElementById("nav-links");
-
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("show");
       });
     </script>
   </body>
