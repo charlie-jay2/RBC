@@ -32,7 +32,69 @@
       setInterval(checkForReload, 5000);
     </script>
     <style>
-      /* (Your existing CSS styles) */
+      /* Global Styles */
+      body {
+        font-family: "Raleway", sans-serif;
+        background-color: #1e1e2e;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #team {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+        gap: 30px;
+        max-width: 1000px;
+        margin: 50px auto;
+      }
+
+      /* Mobile Styles */
+      @media (max-width: 768px) {
+        .team-grid {
+          grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .team-grid {
+          grid-template-columns: 1fr; /* 1 column for mobile phones */
+        }
+      }
+
+      .team-member {
+        background-color: #2e2e3f;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .team-member h3 {
+        font-size: 1.5em;
+        color: #b06cfc;
+      }
+
+      .team-member p {
+        color: #f0f0f0;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 50px;
+      }
 
       /* Hamburger Menu Styles */
       .hamburger {
@@ -117,7 +179,6 @@
         <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
         <li><a href="our-team.html">Our Team</a></li>
         <li><a href="blogs.html">Blogs</a></li>
-
         <li><a href="radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
@@ -169,103 +230,22 @@
         </div>
         <div class="team-member">
           <h3>Blake</h3>
-          <p>Head of Division | Security</p>
-        </div>
-        <div class="team-member">
-          <h3>Bella</h3>
-          <p>Head of Division | Visuals</p>
-        </div>
-        <div class="team-member">
-          <h3>Sam</h3>
-          <p>Head of Division | Scripted/Reality</p>
-        </div>
-        <div class="team-member">
-          <h3>Keb</h3>
-          <p>Project Manager</p>
-        </div>
-        <div class="team-member">
-          <h3>George</h3>
-          <p>Project Manager</p>
-        </div>
-        <div class="team-member">
-          <h3>Austin</h3>
-          <p>Project Manager</p>
-        </div>
-        <div class="team-member">
-          <h3>Jay</h3>
-          <p>Project Manager</p>
-        </div>
-        <div class="team-member">
-          <h3>Arca</h3>
-          <p>Project Manager</p>
+          <p>Head of Division | Graphics</p>
         </div>
       </div>
     </section>
-
     <footer>
       <p>&copy; 2024 RBC Television. All rights reserved.</p>
     </footer>
 
     <script>
-      // Hamburger Menu Toggle
+      // Toggle menu on hamburger click
       const hamburger = document.getElementById("hamburger");
       const navLinks = document.getElementById("nav-links");
 
       hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+        navLinks.classList.toggle("show");
       });
     </script>
-
-    <style>
-      body {
-        font-family: "Raleway", sans-serif;
-        background-color: #1e1e2e;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-      }
-
-      h1 {
-        text-align: center;
-        margin-top: 50px;
-      }
-
-      #team {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-
-      .team-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-        max-width: 1000px;
-        margin: 50px auto;
-      }
-
-      .team-member {
-        background-color: #2e2e3f;
-        padding: 20px;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .team-member h3 {
-        font-size: 1.5em;
-        color: #b06cfc;
-      }
-
-      .team-member p {
-        color: #f0f0f0;
-      }
-
-      footer {
-        text-align: center;
-        margin-top: 50px;
-      }
-    </style>
   </body>
 </html>
