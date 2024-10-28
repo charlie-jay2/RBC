@@ -239,6 +239,7 @@
       #song-history table tr:last-child {
         border-bottom: none; /* Remove the border from the last row */
       }
+
       #song-history table tr td {
         padding: 10px;
       }
@@ -271,8 +272,6 @@
 
       const placeholderImage = "./assets/Radio1Back.png";
 
-      let currentSongId = null;
-
       async function fetchSongInfo() {
         try {
           const response = await fetch(
@@ -280,63 +279,53 @@
           );
           const data = await response.json();
 
-          // Check if the current song has changed
-          if (data.current_song.id !== currentSongId) {
-            currentSongId = data.current_song.id; // Update the current song ID
-
-            // Update current song info
-            songTitle.innerText = data.current_song.title || "Unknown";
-            artistName.innerText = data.current_song.artist || "Unknown Artist";
-            albumArt.src = data.current_song.art || placeholderImage;
-            albumArt.style.display = "block";
+          if (data && data.current_song) {
+            updateSongInfo(data.current_song);
+            updateHistory(data.history);
+          } else {
+            console.warn("No song data available");
           }
-
-          // Update song history
-          historyTable.innerHTML = ""; // Clear existing history
-          data.history.forEach((song) => {
-            const row = document.createElement("tr");
-
-            const songNameCell = document.createElement("td");
-            songNameCell.innerText = song.title;
-
-            const artistCell = document.createElement("td");
-            artistCell.innerText = song.artist;
-
-            const artworkCell = document.createElement("td");
-            const artworkImg = document.createElement("img");
-            artworkImg.src = song.art || placeholderImage;
-            artworkImg.alt = "Album Art";
-            artworkImg.width = 50;
-            artworkImg.height = 50;
-            artworkCell.appendChild(artworkImg);
-
-            row.appendChild(songNameCell);
-            row.appendChild(artistCell);
-            row.appendChild(artworkCell);
-
-            historyTable.appendChild(row);
-          });
         } catch (error) {
           console.error("Error fetching song info:", error);
         }
       }
 
-      // Update song info every 10 seconds
-      setInterval(fetchSongInfo, 10000); // Fetch every 10 seconds
+      function updateSongInfo(song) {
+        songTitle.textContent = song.title || "Unknown";
+        artistName.textContent = song.artist || "Unknown";
+        albumArt.src = song.art || placeholderImage;
+        albumArt.style.display = "block";
+      }
+
+      function updateHistory(history) {
+        historyTable.innerHTML = ""; // Clear previous history
+        history.forEach((song) => {
+          const newRow = document.createElement("tr");
+          newRow.innerHTML = `
+            <td>${song.title || "Unknown"} | ${
+            song.artist || "Unknown Artist"
+          } | 
+            <img src="${
+              song.art || placeholderImage
+            }" alt="Art" style="width: 50px; height: 50px; vertical-align: middle;" />
+            </td>`;
+          historyTable.appendChild(newRow);
+        });
+      }
 
       playButton.addEventListener("click", () => {
-        if (playButton.innerText === "Play") {
+        if (audioPlayer.paused) {
           audioPlayer.src = stations.radio1;
           audioPlayer.play();
-          playButton.innerText = "Pause";
+          playButton.textContent = "Pause";
         } else {
           audioPlayer.pause();
-          playButton.innerText = "Play";
+          playButton.textContent = "Play";
         }
       });
 
-      // Initial fetch on page load
-      window.onload = fetchSongInfo;
+      fetchSongInfo();
+      setInterval(fetchSongInfo, 2000);
     </script>
   </body>
 </html>
