@@ -3,32 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - RBC Television</title>
-    <link rel="stylesheet" href="styles.css" />
-
-    <meta property="og:title" content="RBC Television" />
-    <meta property="og:description" content="Home" />
-    <meta
-      property="og:image"
-      content="https://rbc-television.netlify.app/assets/RBCWhite.png" />
-    <meta property="og:url" content="https://rbc-television.netlify.app" />
-    <meta property="og:type" content="website" />
-    <script src="notibar.js" defer></script>
-    <script>
-      async function checkForReload() {
-        const response = await fetch("/.netlify/functions/triggerReload");
-        const data = await response.json();
-        if (data.shouldReload) {
-          location.reload(); // Reload the page if triggered
-        }
-      }
-
-      // Check for reload every 5 seconds
-      setInterval(checkForReload, 5000);
-    </script>
+    <title>Show 1 - RBC Television</title>
+    <link rel="stylesheet" href="../styles.css" />
     <style>
-      /* (Your existing CSS styles) */
-
       /* Hamburger Menu Styles */
       .hamburger {
         display: none; /* Hidden by default */
@@ -51,6 +28,8 @@
         justify-content: space-between; /* Space out nav items */
         align-items: center; /* Center items vertically */
         padding: 10px; /* Padding around the nav */
+        margin: 0; /* Ensure no margin */
+        background-color: #333; /* Background color for navbar */
       }
 
       nav ul {
@@ -86,7 +65,7 @@
           z-index: 999; /* Ensure it's above other content */
         }
 
-        nav ul.show {
+        nav ul.active {
           display: flex; /* Show nav items when toggled */
         }
 
@@ -94,6 +73,19 @@
           margin: 10px 0; /* Vertical margin between items */
           text-align: center; /* Center align text */
         }
+      }
+
+      /* Add padding to body and section for spacing */
+      #show {
+        padding: 20px 10px; /* Optional: Adds vertical padding for the show section */
+      }
+
+      .centered-image {
+        display: block; /* Required for margin auto to work */
+        margin: 0 auto; /* Center horizontally */
+        max-width: 100%; /* Responsive image */
+        height: auto; /* Maintains aspect ratio */
+        border-radius: 50%;
       }
     </style>
   </head>
@@ -104,16 +96,16 @@
         <div class="bar"></div>
         <div class="bar"></div>
       </div>
-      <a href="index.html"
-        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
-      /></a>
+      <a href="../index.html">
+        <img src="../assets/RBCWhite.png" alt="RBC Logo" class="nav-img" />
+      </a>
       <ul id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="../index.html">Home</a></li>
         <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
-        <li><a href="our-team.html">Our Team</a></li>
-        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="../our-team.html">Our Team</a></li>
+        <li><a href="../blogs.html">Blogs</a></li>
 
-        <li><a href="radio.html">Radio</a></li>
+        <li><a href="../radio.html">Radio</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">Shows</a>
           <div class="dropdown-content">
@@ -126,62 +118,41 @@
       </ul>
     </nav>
 
-    <div id="notibar">
-      <!-- Notibar content will be dynamically added by notibar.js -->
-    </div>
-
-    <section id="home" style="padding: 0px 20px">
-      <h1>Welcome to RBC Television</h1>
-      <p>
-        Listen to the best music on RBC Radio 1. Check out our shows and meet
-        our fantastic team! Alongside our fantastic shows we have to offer at
-        RBC. Do that, by hovering over "Shows" and selecting the show of your
-        choice.
-      </p>
-      <style>
-        .stations,
-        .our-team {
-          text-decoration: underline;
-          color: white;
+    <script>
+      async function checkForReload() {
+        const response = await fetch("/.netlify/functions/triggerReload");
+        const data = await response.json();
+        if (data.shouldReload) {
+          location.reload(); // Reload the page if triggered
         }
-      </style>
-      <div id="stations">
-        <h2>Our Radio Stations</h2>
-        <div>
-          <a href="radio.html" class="stations">Listen to RBC Radio 1</a>
-        </div>
-      </div>
+      }
 
-      <div id="team-preview">
-        <h2>Meet Our Team</h2>
-        <p>
-          Check out our
-          <a href="our-team.html" class="our-team">team page</a> to meet our
-          executive team members.
-        </p>
-      </div>
+      // Check for reload every 5 seconds
+      setInterval(checkForReload, 5000);
+
+      // Hamburger menu functionality
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    </script>
+
+    <section id="show">
+      <h1>RBC Extras</h1>
+      <img
+        src="../assets/extras.jpg"
+        alt="Description of the image"
+        class="centered-image" />
+      <br />
+      <p style="text-align: center">
+        All the content that just aint good enough to make it to main channel
+      </p>
     </section>
 
     <footer>
       <p>&copy; 2024 RBC Television. All rights reserved.</p>
     </footer>
-
-    <script>
-      // Hamburger Menu Toggle
-      const hamburger = document.getElementById("hamburger");
-      const navLinks = document.getElementById("nav-links");
-      const notibar = document.getElementById("notibar");
-
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
-
-        // Toggle Notibar visibility
-        if (navLinks.classList.contains("show")) {
-          notibar.style.display = "none"; // Hide notibar when menu is open
-        } else {
-          notibar.style.display = "block"; // Show notibar when menu is closed
-        }
-      });
-    </script>
   </body>
 </html>
