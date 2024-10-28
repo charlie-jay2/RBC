@@ -326,6 +326,22 @@
 
       fetchSongInfo();
       setInterval(fetchSongInfo, 2000);
+
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+      const notibar = document.getElementById("notibar");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+
+        // Toggle Notibar visibility
+        if (navLinks.classList.contains("show")) {
+          notibar.style.display = "none"; // Hide notibar when menu is open
+        } else {
+          notibar.style.display = "block"; // Show notibar when menu is closed
+        }
+      });
     </script>
   </body>
 </html>
