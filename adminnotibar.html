@@ -184,8 +184,7 @@
       <input type="text" id="buttonText" placeholder="Button Text" />
       <input type="color" id="buttonColor" placeholder="Button Color" />
       <input type="text" id="buttonURL" placeholder="Button URL" />
-      <input type="checkbox" id="buttonActive" />
-      <label for="buttonActive">Activate Button</label>
+      <input type="checkbox" id="buttonActive" /> Button Active
       <label for="buttonTextColor">Button Text Color:</label>
       <input
         type="color"
@@ -246,6 +245,22 @@
       }
 
       document
+        .getElementById("buttonActive")
+        .addEventListener("change", function () {
+          const button = document.getElementById("actionButton");
+          if (this.checked) {
+            button.style.display = "inline-block"; // Show button
+          } else {
+            button.style.display = "none"; // Hide button
+          }
+        });
+
+      // Make sure to call the event when the page loads
+      document
+        .getElementById("buttonActive")
+        .dispatchEvent(new Event("change"));
+
+      document
         .getElementById("save-btn")
         .addEventListener("click", async () => {
           const data = {
@@ -275,6 +290,16 @@
             alert(result.error || "Failed to update Notibar settings."); // Show error message if available
           }
         });
+    </script>
+
+    <script>
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show");
+      });
     </script>
   </body>
 </html>

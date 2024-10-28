@@ -27,7 +27,7 @@ exports.handler = async (event) => {
                 $set: {
                     text: data.text,
                     color: data.color,
-                    buttonActive: !!data.buttonText,
+                    buttonActive: data.buttonActive, // Directly using the checkbox value
                     buttonText: data.buttonText,
                     buttonColor: data.buttonColor,
                     buttonURL: data.buttonURL,
