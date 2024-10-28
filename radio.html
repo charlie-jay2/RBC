@@ -100,6 +100,12 @@
       <audio id="audio-player" controls style="display: none"></audio>
     </section>
 
+    <iframe
+      src="https://azura.typicalmedia.net/public/rbcradio1/schedule/embed?theme=light"
+      frameborder="0"
+      allowtransparency="true"
+      style="width: 90%; min-height: 800px; border: 0"></iframe>
+
     <footer>
       <p>&copy; 2024 RBC Television. All rights reserved.</p>
     </footer>
@@ -325,7 +331,7 @@
       });
 
       fetchSongInfo();
-      setInterval(fetchSongInfo, 2000);
+      setInterval(fetchSongInfo, 20000);
 
       // Hamburger Menu Toggle
       const hamburger = document.getElementById("hamburger");
