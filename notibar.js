@@ -1,78 +1,53 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Variables to control Notibar and button states
-    let notibarActive = false; // Control the visibility of the Notibar
-    let button1Active = false; // Control the first button visibility
-    let button2Active = true; // Control the second button visibility
-    let button3Active = false; // Control the third button visibility
+// notibar.js
+async function loadNotibar() {
+    try {
+        const response = await fetch('/.netlify/functions/getNotibar');
+        const data = await response.json();
 
-    // Function to configure and show the Notibar
-    function configureNotibar(message, buttonTexts, buttonLinks, styles) {
-        const notibar = document.getElementById("notibar"); // Get the Notibar element
-        notibar.innerHTML = ""; // Clear any existing content
+        const notibarElement = document.getElementById('notibar');
 
-        // Show or hide based on the active state
-        notibar.style.display = notibarActive ? "block" : "none";
+        if (data.active) {
+            // If the notibar is active and not already shown, fade it in
+            if (!notibarElement.classList.contains('show')) {
+                // Populate the notibar with data
+                notibarElement.innerHTML = `
+                    <div style="background-color: ${data.color}; padding: 30px; text-align: center;">
+                        <span style="color: white;">${data.text}</span>
+                        ${data.buttonActive ? `
+                        <a href="${data.buttonURL}" target="_blank" style="background-color: ${data.buttonColor}; color: white; padding: 10px; border-radius: 5px; margin-left: 10px; text-decoration: none;">
+                            ${data.buttonText}
+                        </a>
+                        ` : ''}
+                    </div>
+                `;
 
-        // Set styles
-        notibar.style.backgroundColor = styles.backgroundColor || "#333"; // Default background color
-        notibar.style.color = styles.textColor || "white"; // Default text color
-        notibar.style.padding = "10px"; // Add padding for better spacing
-        notibar.style.textAlign = "center"; // Center the text and buttons
-        notibar.style.fontSize = styles.fontSize || "16px"; // Default font size
-
-        // Add message text
-        const notibarText = document.createElement("span");
-        notibarText.textContent = message;
-        notibarText.style.margin = "0 0px"; // Add margin
-        notibar.appendChild(notibarText);
-
-        // Add buttons
-        [button1Active, button2Active, button3Active].forEach((isActive, index) => {
-            if (isActive) {
-                const button = document.createElement("button");
-                button.textContent = buttonTexts[index] || `Button ${index + 1}`;
-                button.onclick = () => {
-                    if (buttonLinks[index]) {
-                        window.location.href = buttonLinks[index]; // Navigate to link on button click
-                    }
-                };
-                button.style.margin = "0 5px"; // Add margin between buttons
-                button.style.color = styles.buttonTextColor || "white"; // Button text color
-                button.style.backgroundColor = styles.buttonBackgroundColor || "#007BFF"; // Button background color
-                button.style.border = `1px solid ${styles.buttonBorderColor || "black"}`; // Button border color
-                button.style.borderRadius = styles.buttonBorderRadius || "5px"; // Button border radius
-                button.style.padding = "10px 30px"; // Button padding
-                button.style.fontSize = styles.buttonFontSize || "16px"; // Default button font size
-                button.style.cursor = "pointer"; // Change cursor to pointer
-                button.onmouseover = () => button.style.cursor = "pointer"; // Pointer on hover
-                button.onmouseout = () => button.style.cursor = ""; // Reset cursor
-                notibar.appendChild(button);
+                notibarElement.style.opacity = 0; // Start hidden for fade-in effect
+                notibarElement.style.display = 'block'; // Show the notibar
+                requestAnimationFrame(() => {
+                    notibarElement.style.transition = 'opacity 0.5s ease'; // Set the transition
+                    notibarElement.style.opacity = 1; // Fade in
+                });
+                notibarElement.classList.add('show'); // Add show class to indicate it's visible
             }
-        });
-    }
+        } else {
+            // If not active, fade it out
+            if (notibarElement.classList.contains('show')) {
+                notibarElement.style.transition = 'opacity 0.5s ease'; // Set the transition
+                notibarElement.style.opacity = 0; // Fade out
 
-    // Function to toggle the Notibar visibility and configure it
-    window.toggleNotibar = function (isActive, message, buttonTexts, buttonLinks, styles) {
-        notibarActive = isActive; // Update the active state
-        const notibar = document.getElementById("notibar"); // Get the Notibar element
-        notibar.style.display = notibarActive ? "block" : "none"; // Ensure visibility matches active state
-        configureNotibar(message, buttonTexts, buttonLinks, styles); // Configure Notibar
-    };
+                // Set display to none after fade out transition completes
+                setTimeout(() => {
+                    notibarElement.style.display = 'none'; // Hide after fading out
+                }, 500); // Match this timeout with the transition duration
 
-    // Example usage: Show the Notibar with buttons and styles
-    toggleNotibar(true,
-        "This website is under development | Our contact form is unavailable",
-        ["Learn More", "Contact Us", "Dismiss"],
-        ["shows.html", "https://discord.gg/rbctv", target = "_blank", ""], // Button links
-        {
-            backgroundColor: "#333", // Notibar background color
-            textColor: "white", // Notibar text color
-            buttonTextColor: "#ffffff", // Button text color
-            buttonBackgroundColor: "#b06cfc", // Button background color
-            buttonBorderColor: "#b06cfc", // Button border color
-            buttonBorderRadius: "5px", // Button border radius
-            fontSize: "18px", // Customize the font size
-            buttonFontSize: "18px", // Customize button font size
+                notibarElement.classList.remove('show'); // Remove show class to indicate it's hidden
+            }
         }
-    );
-});
+    } catch (error) {
+        console.error('Error loading notibar:', error);
+    }
+}
+
+// Call loadNotibar to display the notification bar
+loadNotibar();
+setInterval(loadNotibar, 5000); // Check for updates every 5 seconds

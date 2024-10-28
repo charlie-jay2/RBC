@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-// Use the connection string directly from the environment variable
+// Connect using the environment variable
 const connectionString = process.env.MONGODB_URI;
 
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -33,4 +33,18 @@ const blogSchema = new mongoose.Schema({
 // Create the Blog model
 const Blog = mongoose.model('Blog', blogSchema);
 
-module.exports = { User, Blog };
+// Define the notibar schema
+const notibarSchema = new mongoose.Schema({
+    text: { type: String, required: true },
+    color: { type: String, default: '#333' },
+    width: { type: String, default: '100%' },
+    active: { type: Boolean, default: true },
+    buttonActive: { type: Boolean, default: false },
+    buttonText: { type: String, default: '' },
+    buttonColor: { type: String, default: '#444' },
+    buttonURL: { type: String, default: '#' },
+});
+
+const Notibar = mongoose.model('Notibar', notibarSchema);
+
+module.exports = { User, Blog, Notibar };
