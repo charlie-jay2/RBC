@@ -47,4 +47,5 @@ const notibarSchema = new mongoose.Schema({
 
 const Notibar = mongoose.model('Notibar', notibarSchema);
 
+
 module.exports = { User, Blog, Notibar };

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - RBC Television</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <meta property="og:title" content="RBC Television" />
+    <meta property="og:description" content="Home" />
+    <meta
+      property="og:image"
+      content="https://rbc-television.netlify.app/assets/RBCWhite.png" />
+    <meta property="og:url" content="https://rbc-television.netlify.app" />
+    <meta property="og:type" content="website" />
+
+    <style>
+      .hamburger {
+        display: none; /* Hidden by default */
+        cursor: pointer; /* Pointer cursor on hover */
+        flex-direction: column; /* Arrange items vertically */
+        padding: 10px; /* Padding for the hamburger */
+      }
+
+      .bar {
+        height: 3px; /* Height of the bars */
+        width: 30px; /* Width of the bars */
+        background-color: white; /* Bar color */
+        margin: 3px 0; /* Margin between bars */
+        transition: 0.4s; /* Transition effect */
+      }
+
+      /* Navigation styles */
+      nav {
+        display: flex; /* Flex layout for nav */
+        justify-content: space-between; /* Space out nav items */
+        align-items: center; /* Center items vertically */
+        padding: 10px; /* Padding around the nav */
+      }
+
+      nav ul {
+        list-style: none; /* Remove default list style */
+        display: flex; /* Flex display for the nav items */
+        margin: 0; /* No margin */
+        padding: 0; /* No padding */
+      }
+
+      nav ul li {
+        margin: 0 15px; /* Margin between nav items */
+      }
+
+      nav a {
+        text-decoration: none; /* No underline for links */
+        color: white; /* Link color */
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex; /* Show hamburger icon on mobile */
+        }
+
+        nav ul {
+          display: none; /* Hide nav items by default on mobile */
+          flex-direction: column; /* Stack nav items vertically */
+          position: absolute; /* Position absolutely */
+          background-color: #333; /* Background color for the menu */
+          top: 60px; /* Position below the navbar */
+          left: 0; /* Align to the left */
+          width: 100%; /* Full width */
+          z-index: 999; /* Ensure it's above other content */
+        }
+
+        nav ul.show {
+          display: flex; /* Show nav items when toggled */
+        }
+
+        nav ul li {
+          margin: 10px 0; /* Vertical margin between items */
+          text-align: center; /* Center align text */
+        }
+      }
+
+      /* Podcast Container Styles */
+      #podcastContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        width: 100%; /* Full width */
+        box-sizing: border-box; /* Include padding in width calculation */
+      }
+
+      .show-section {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
+        border: 1px solid #444;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #333; /* Background color for the sections */
+        color: white; /* Text color */
+      }
+
+      .show-section h3 {
+        cursor: pointer;
+        padding: 12px;
+        font-size: 1.5em; /* Larger font size */
+        text-align: center;
+        transition: background-color 0.3s;
+      }
+
+      .show-section h3:hover {
+        background-color: #555;
+      }
+
+      .episode-list {
+        display: none;
+        background-color: #444;
+        padding: 10px;
+      }
+
+      .episode-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #555;
+        color: white;
+      }
+
+      .episode-item button {
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        padding: 5px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .episode-item button:hover {
+        background-color: #004a99;
+      }
+
+      .player {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #222;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+        width: 90%; /* Responsive width */
+        max-width: 400px; /* Maximum width */
+      }
+
+      .player audio {
+        width: 100%;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        #podcastContainer {
+          padding: 10px;
+        }
+
+        .show-section h3 {
+          font-size: 1.2em; /* Adjust font size for mobile */
+        }
+
+        .episode-item button {
+          padding: 5px 8px;
+        }
+
+        .player {
+          bottom: 10px;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <a href="index.html"
+        ><img src="./assets/RBCWhite.png" alt="RBC Logo" class="nav-img"
+      /></a>
+      <ul id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="https://discord.gg/rbctv" target="blank">Contact</a></li>
+        <li><a href="our-team.html">Our Team</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="podcasts.html">Podcasts</a></li>
+
+        <li><a href="radio.html">Radio</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Shows</a>
+          <div class="dropdown-content">
+            <a href="/shows/extras.html">Extras</a>
+            <a href="/shows/news24.html">News 24</a>
+            <a href="/shows/world-news.html">World News</a>
+            <a href="/shows/the-star.html">The Star</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <section id="home" style="padding: 0px 20px; text-align: center">
+      <h1>Welcome to RBC Television Podcasts</h1>
+      <p>
+        Below you can find the list of all of the podcasts and their episodes in
+        their category. Just click the name of the podcast and you will find all
+        their information.
+      </p>
+    </section>
+
+    <div id="podcastContainer">
+      <h1>Currently there are no podcasts available</h1>
+      <!-- Predefined podcast data will be rendered here -->
+    </div>
+
+    <div class="player" id="audioPlayer">
+      <audio id="audioElement" controls autoplay></audio>
+    </div>
+
+    <script>
+      // const podcasts = [
+      //   {
+      //     showName: "Tech Talk",
+      //     episodes: [
+      //       {
+      //         episodeName: "Episode 1: Intro to Tech",
+      //         episodeDate: "2024-01-01",
+      //         audioSrc: "assets/podcasts/Tech Talk/RBCTOHDemo.mp3",
+      //       },
+      //       {
+      //         episodeName: "Episode 2: The Future of AI",
+      //         episodeDate: "2024-02-01",
+      //         audioSrc:
+      //           "assets/podcasts/Tech Talk/Episode 2 - The Future of AI.mp3",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     showName: "World Affairs",
+      //     episodes: [
+      //       {
+      //         episodeName: "Episode 1: Global Warming",
+      //         episodeDate: "2024-01-15",
+      //         audioSrc:
+      //           "assets/podcasts/World Affairs/Episode 1 - Global Warming.mp3",
+      //       },
+      //       {
+      //         episodeName: "Episode 2: Politics Today",
+      //         episodeDate: "2024-03-01",
+      //         audioSrc:
+      //           "assets/podcasts/World Affairs/Episode 2 - Politics Today.mp3",
+      //       },
+      //     ],
+      //   },
+      // ];
+
+      const podcastContainer = document.getElementById("podcastContainer");
+      const audioPlayer = document.getElementById("audioPlayer");
+      const audioElement = document.getElementById("audioElement");
+
+      function loadPodcasts() {
+        podcasts.forEach((show) => {
+          const showSection = document.createElement("div");
+          showSection.classList.add("show-section");
+
+          const showTitle = document.createElement("h3");
+          showTitle.textContent = show.showName;
+          showTitle.addEventListener("click", () => {
+            const currentlyOpen = document.querySelector(".episode-list.show");
+            if (currentlyOpen && currentlyOpen !== episodesList) {
+              currentlyOpen.classList.remove("show");
+              currentlyOpen.style.display = "none";
+            }
+
+            episodesList.classList.toggle("show");
+            episodesList.style.display =
+              episodesList.style.display === "block" ? "none" : "block";
+          });
+          showSection.appendChild(showTitle);
+
+          const episodesList = document.createElement("div");
+          episodesList.classList.add("episode-list");
+
+          show.episodes.forEach((episode) => {
+            const episodeItem = document.createElement("div");
+            episodeItem.classList.add("episode-item");
+
+            const episodeName = document.createElement("span");
+            episodeName.textContent = episode.episodeName;
+
+            const episodeDate = document.createElement("span");
+            episodeDate.textContent = episode.episodeDate;
+
+            const playButton = document.createElement("button");
+            playButton.textContent = "Play";
+            playButton.addEventListener("click", () => {
+              audioElement.src = episode.audioSrc;
+              audioElement.play();
+              audioPlayer.style.display = "block"; // Show the audio player
+            });
+
+            episodeItem.appendChild(episodeName);
+            episodeItem.appendChild(episodeDate);
+            episodeItem.appendChild(playButton);
+            episodesList.appendChild(episodeItem);
+          });
+
+          showSection.appendChild(episodesList);
+          podcastContainer.appendChild(showSection);
+        });
+      }
+
+      loadPodcasts();
+    </script>
+    <script>
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("nav-links");
+      const notibar = document.getElementById("notibar");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("show"); // Toggle the 'show' class on the nav links
+
+        // Toggle Notibar visibility
+        if (navLinks.classList.contains("show")) {
+          notibar.style.display = "none"; // Hide notibar when menu is open
+        } else {
+          notibar.style.display = "block"; // Show notibar when menu is closed
+        }
+      });
+    </script>
+  </body>
+</html>
