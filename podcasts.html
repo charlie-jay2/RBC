@@ -223,54 +223,103 @@
     </section>
 
     <div id="podcastContainer">
-      <h1>Currently there are no podcasts available</h1>
+      <!-- <h1>Currently there are no podcasts available</h1> -->
       <!-- Predefined podcast data will be rendered here -->
     </div>
 
     <div class="player" id="audioPlayer">
       <audio id="audioElement" controls autoplay></audio>
+      <img
+        id="episodeImage"
+        src=""
+        alt="Episode Image"
+        style="width: 100%; margin-top: 10px; border-radius: 8px" />
     </div>
 
     <script>
-      // const podcasts = [
-      //   {
-      //     showName: "Tech Talk",
-      //     episodes: [
-      //       {
-      //         episodeName: "Episode 1: Intro to Tech",
-      //         episodeDate: "2024-01-01",
-      //         audioSrc: "assets/podcasts/Tech Talk/RBCTOHDemo.mp3",
-      //       },
-      //       {
-      //         episodeName: "Episode 2: The Future of AI",
-      //         episodeDate: "2024-02-01",
-      //         audioSrc:
-      //           "assets/podcasts/Tech Talk/Episode 2 - The Future of AI.mp3",
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     showName: "World Affairs",
-      //     episodes: [
-      //       {
-      //         episodeName: "Episode 1: Global Warming",
-      //         episodeDate: "2024-01-15",
-      //         audioSrc:
-      //           "assets/podcasts/World Affairs/Episode 1 - Global Warming.mp3",
-      //       },
-      //       {
-      //         episodeName: "Episode 2: Politics Today",
-      //         episodeDate: "2024-03-01",
-      //         audioSrc:
-      //           "assets/podcasts/World Affairs/Episode 2 - Politics Today.mp3",
-      //       },
-      //     ],
-      //   },
-      // ];
+      const podcasts = [
+        {
+          showName: "The Oliver Show",
+          episodes: [
+            {
+              episodeName: "Pilot",
+              episodeDate: "2024/9/28",
+              audioSrc: "assets/podcasts/TOS/Audios/day1.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "Is it Sucessful?",
+              episodeDate: "2024/9/29",
+              audioSrc: "assets/podcasts/TOS/Audios/day2.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "10 Minutes Later...",
+              episodeDate: "2024/10/5",
+              audioSrc: "assets/podcasts/TOS/Audios/day3.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "The Olivia Special",
+              episodeDate: "2024/10/6",
+              audioSrc: "assets/podcasts/TOS/Audios/day4.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "Hey guys, Hurricane Milton here!",
+              episodeDate: "2024/10/12",
+              audioSrc: "assets/podcasts/TOS/Audios/day5.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "2 Rqeusts, 1 Show",
+              episodeDate: "2024/10/13",
+              audioSrc: "assets/podcasts/TOS/Audios/day6.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day1-6.png", // Image for episode
+            },
+            {
+              episodeName: "New Release special + P-Pop TIME!!!!",
+              episodeDate: "2024/10/19",
+              audioSrc: "assets/podcasts/TOS/Audios/day7.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day7.png", // Image for episode
+            },
+            {
+              episodeName: "Tay Tay Yesterday (800 Member Special)",
+              episodeDate: "2024/10/20",
+              audioSrc: "assets/podcasts/TOS/Audios/day8.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day8.png", // Image for episode
+            },
+            {
+              episodeName: "I'm fine.",
+              episodeDate: "2024/10/26",
+              audioSrc: "assets/podcasts/TOS/Audios/day9.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day9-10.png", // Image for episode
+            },
+            {
+              episodeName: "Spinning Brain Complete!",
+              episodeDate: "2024/10/27",
+              audioSrc: "assets/podcasts/TOS/Audios/day10.mp3",
+              imageSrc: "assets/podcasts/TOS/Covers/Day9-10.png", // Image for episode
+            },
+          ],
+        },
+        // {
+        //   showName: "Hashtag Podcast",
+        //   episodes: [
+        //     {
+        //       episodeName: "N/A",
+        //       episodeDate: "N/A",
+        //       audioSrc: "assets/podcasts/HP",
+        //       imageSrc: "assets/images/hashtag_podcast_episode.png", // Image for episode
+        //     },
+        //   ],
+        // },
+      ];
 
       const podcastContainer = document.getElementById("podcastContainer");
       const audioPlayer = document.getElementById("audioPlayer");
       const audioElement = document.getElementById("audioElement");
+      const episodeImage = document.getElementById("episodeImage");
 
       function loadPodcasts() {
         podcasts.forEach((show) => {
@@ -309,6 +358,7 @@
             playButton.textContent = "Play";
             playButton.addEventListener("click", () => {
               audioElement.src = episode.audioSrc;
+              episodeImage.src = episode.imageSrc; // Set the image source for the episode
               audioElement.play();
               audioPlayer.style.display = "block"; // Show the audio player
             });
